@@ -1,148 +1,148 @@
 # notegpt-skills
 
-AI Agent Skills 集合 — 覆盖浏览器自动化、音视频转录和完整的 SEO 工作流。
+AI Agent Skills Collection — covering browser automation, audio/video transcription, and complete SEO workflows.
 
-## 目录结构
+## Directory Structure
 
 ```
 skills/
-├── browser-automation/       # 浏览器自动化（反检测）
-├── transcript/               # 音视频转文字
-└── seo/                      # SEO 自动化管线
-    ├── seo-keyword-difficulty/   # 步骤 0：关键词难度分析
-    ├── page-seo-generator/       # 步骤 1：英文 SEO 页面生成
-    ├── page-seo-generator-i18n/  # 步骤 1：多语言 SEO 页面生成
-    ├── seo-image-generator/      # 步骤 2：SEO 配图生成
-    └── page-seo-checker/         # 最终步骤：SEO 合规检查
+├── browser-automation/       # Browser Automation (Anti-Detection)
+├── transcript/               # Audio/Video Transcription
+└── seo/                      # SEO Automation Pipeline
+    ├── seo-keyword-difficulty/   # Step 0: Keyword Difficulty Analysis
+    ├── page-seo-generator/       # Step 1: English SEO Page Generation
+    ├── page-seo-generator-i18n/  # Step 1: Multilingual SEO Page Generation
+    ├── seo-image-generator/      # Step 2: SEO Image Generation
+    └── page-seo-checker/         # Final Step: SEO Compliance Check
 ```
 
 ---
 
-## 技能概览
+## Skill Overview
 
-### 1. Browser Automation — 浏览器自动化
+### 1. Browser Automation
 
-基于 **CloakBrowser**（预打补丁的 Chromium）实现的反检测浏览器自动化。
+Anti-detection browser automation powered by **CloakBrowser** (a pre-patched Chromium).
 
-| 特性 | 说明 |
-|------|------|
-| **反检测** | C++ 源码级指纹修补，绕过 reCAPTCHA v3、Cloudflare Turnstile、FingerprintJS |
-| **双语言** | JavaScript（Playwright/Puppeteer）和 Python 双 API |
-| **拟人化** | Bézier 曲线鼠标路径、逐字符打字延迟、自然滚动物理 |
-| **GeoIP** | 根据代理 IP 自动匹配时区和语言环境 |
-| **持久化** | 支持持久化用户配置，保持登录态和 Cookie |
+| Feature | Description |
+|---------|-------------|
+| **Anti-Detection** | C++ source-level fingerprint patching, bypassing reCAPTCHA v3, Cloudflare Turnstile, FingerprintJS |
+| **Dual Language** | JavaScript (Playwright/Puppeteer) and Python APIs |
+| **Human-Like** | Bézier curve mouse paths, per-character typing delays, natural scroll physics |
+| **GeoIP** | Auto-matching timezone and locale based on proxy IP |
+| **Persistence** | Persistent user profiles to maintain login sessions and cookies |
 
-**触发词**：scrape XX page、automate filling XX、bypass captcha for XX
-
----
-
-### 2. Transcript — 音视频转文字
-
-通用的音视频到文本转换工具。
-
-| 来源 | 方法 | 输出格式 |
-|------|------|----------|
-| **YouTube URL** | yt-dlp 提取字幕（手动字幕 → 自动字幕 → Whisper 兜底） | 纯文本、SRT/VTT、JSON、时间戳片段 |
-| **音视频文件** | faster-whisper（CTranslate2 加速，4x 推理速度） | 同上 |
-
-**触发词**：transcribe、transcript、download subtitles、extract text from video、convert audio to text
+**Trigger words**: scrape XX page, automate filling XX, bypass captcha for XX
 
 ---
 
-### 3. SEO 自动化管线
+### 2. Transcript — Audio/Video to Text
 
-#### 步骤 0：[seo-keyword-difficulty](skills/seo/seo-keyword-difficulty/SKILL.md) — 关键词难度分析
+A universal audio/video-to-text conversion tool.
 
-**在任何内容生产之前**，评估关键词是否值得做。
+| Source | Method | Output Formats |
+|--------|--------|----------------|
+| **YouTube URL** | yt-dlp subtitle extraction (manual captions → auto captions → Whisper fallback) | Plain text, SRT/VTT, JSON, timestamped segments |
+| **Audio/Video Files** | faster-whisper (CTranslate2 accelerated, 4× inference speed) | Same as above |
 
-- 通过 `seo-web-cafe` MCP 获取真实 KD 分数、搜索量、Top-10 竞品数据
-- 支持 **Mode A**（单关键词深度分析）和 **Mode B**（多关键词对比）
-- 输出决策报告：🟢 可做 / 🟡 谨慎做 / 🔴 换关键词
-- 包含可行性评分公式：`(Volume/1000) × (1-KD/100) × TrendMultiplier × IntentMultiplier`
+**Trigger words**: transcribe, transcript, download subtitles, extract text from video, convert audio to text
 
-#### 步骤 1：[page-seo-generator](skills/seo/page-seo-generator/SKILL.md) — 英文 SEO 页面生成
+---
 
-从单个关键词输入生成完整的 **11 列 SEO 落地页**。
+### 3. SEO Automation Pipeline
 
-**4 阶段工作流**：
-1. **关键词研究** — 语义分析、竞品情报、用户画像、KD 分析
-2. **竞品 TDK 分析** — 通过 Playwright 抓取竞品真实 Title + Description
-3. **TDK 骨架** — 生成 3 个 Title 选项，Python `len()` 验证字符数
-4. **11 列完整内容** — 从 Hero 区到 Schema 标记的全页面内容
+#### Step 0: [seo-keyword-difficulty](skills/seo/seo-keyword-difficulty/SKILL.md) — Keyword Difficulty Analysis
 
-#### 步骤 1（多语言）：[page-seo-generator-i18n](skills/seo/page-seo-generator-i18n/SKILL.md) — 多语言 SEO 页面生成
+Evaluate whether a keyword is worth pursuing **before any content production**.
 
-面向日语（ja）和中文（zh）市场的原生语言 SEO 内容生成。
+- Retrieve real KD scores, search volume, and Top-10 competitor data via `seo-web-cafe` MCP
+- Supports **Mode A** (single keyword deep analysis) and **Mode B** (multi-keyword comparison)
+- Outputs a decision report: 🟢 Go / 🟡 Proceed with Caution / 🔴 Find Another Keyword
+- Includes feasibility scoring formula: `(Volume/1000) × (1-KD/100) × TrendMultiplier × IntentMultiplier`
 
-- **非机器翻译**：基于英文源页面的信息一致性，独立优化目标语言表达
-- 日语：です・ます調，结论先行，子弹点排版
-- 中文：简洁直接，短句为主，痛点直击
+#### Step 1: [page-seo-generator](skills/seo/page-seo-generator/SKILL.md) — English SEO Page Generator
 
-#### 步骤 2：[seo-image-generator](skills/seo/seo-image-generator/SKILL.md) — SEO 配图生成
+Generate a complete **11-column SEO landing page** from a single keyword input.
 
-为 SEO 页面生成 **4 类视觉素材**：
+**4-Phase Workflow**:
+1. **Keyword Research** — Semantic analysis, competitor intelligence, user persona, KD analysis
+2. **Competitor TDK Analysis** — Scrape real competitor Titles & Descriptions via Playwright
+3. **TDK Skeleton** — Generate 3 title options, character count verified with Python `len()`
+4. **Full 11-Column Content** — Complete page content from Hero section to Schema markup
 
-| 类型 | 比例 | 方式 | 品牌元素 |
-|------|------|------|----------|
-| Banner | 16:9 | 图生图（需要 Logo） | ✅ Logo + URL |
-| 产品介绍 | 1:1 | 文生图 | ❌ 无品牌元素 |
-| 为什么选择 | 1:1 | 文生图 | ❌ 无品牌元素 |
-| 痛点场景 | 1:1 | 文生图 | ❌ 无品牌元素 |
+#### Step 1 (Multilingual): [page-seo-generator-i18n](skills/seo/page-seo-generator-i18n/SKILL.md) — Multilingual SEO Page Generator
 
-#### 最终步骤：[page-seo-checker](skills/seo/page-seo-checker/SKILL.md) — 12 点 SEO 合规检查
+Native-language SEO content generation for Japanese (ja) and Chinese (zh) markets.
 
-发布前的**质量闸门**，对已发布页面执行 12 点自动化检查：
+- **Not machine translation**: Independently optimizes target-language expression while maintaining information consistency with the English source page
+- Japanese: です・ます調, conclusion-first, bullet-point layout
+- Chinese: Concise and direct, short sentences, pain-point focused
 
-| # | 检查项 | 满分 |
-|---|--------|------|
+#### Step 2: [seo-image-generator](skills/seo/seo-image-generator/SKILL.md) — SEO Image Generator
+
+Generate **4 types of visual assets** for SEO pages:
+
+| Type | Ratio | Method | Brand Elements |
+|------|-------|--------|----------------|
+| Banner | 16:9 | Image-to-image (logo required) | ✅ Logo + URL |
+| Product Intro | 1:1 | Text-to-image | ❌ No brand elements |
+| Why Choose Us | 1:1 | Text-to-image | ❌ No brand elements |
+| Pain Point Scenario | 1:1 | Text-to-image | ❌ No brand elements |
+
+#### Final Step: [page-seo-checker](skills/seo/page-seo-checker/SKILL.md) — 12-Point SEO Compliance Check
+
+A pre-publish **quality gate** performing a 12-point automated check on published pages:
+
+| # | Check Item | Max Score |
+|---|------------|-----------|
 | 1 | Title Tag | 10 |
 | 2 | Meta Description | 8 |
 | 3 | Canonical Tag | 5 |
-| 4 | H-Tag 结构 | 8 |
-| 5 | Body 内容字数 | 10 |
-| 6 | 用户评价真实性 | 5 |
-| 7 | FAQ 结构与模式 | 8 |
-| 8 | 图片 ALT 标签 | 5 |
-| 9 | 内链 | 5 |
-| 10 | Schema 结构化数据 | 10 |
-| 11 | Hreflang 标签 | 5 |
-| 12 | 品牌名计数 & 零冠词 | 5 |
+| 4 | H-Tag Structure | 8 |
+| 5 | Body Content Word Count | 10 |
+| 6 | User Review Authenticity | 5 |
+| 7 | FAQ Structure & Schema | 8 |
+| 8 | Image ALT Tags | 5 |
+| 9 | Internal Links | 5 |
+| 10 | Schema Structured Data | 10 |
+| 11 | Hreflang Tags | 5 |
+| 12 | Brand Name Count & Zero Articles | 5 |
 
-**评分标准**：≥80% 🟢 可发布 / 60-79% 🟡 修复后发布 / <60% 🔴 不可发布
+**Scoring**: ≥80% 🟢 Ready to Publish / 60-79% 🟡 Fix Before Publishing / <60% 🔴 Not Ready
 
 ---
 
-## SEO 工作流总览
+## SEO Workflow Overview
 
 ```
-关键词输入
+Keyword Input
     │
     ▼
 ┌─────────────────────────┐
-│  seo-keyword-difficulty │  ← 步骤 0：这个关键词能做吗？
+│  seo-keyword-difficulty │  ← Step 0: Is this keyword viable?
 └───────────┬─────────────┘
-            │ 🟢/🟡 通过
+            │ 🟢/🟡 Passed
             ▼
 ┌─────────────────────────┐
-│  page-seo-generator     │  ← 步骤 1：生成英文 SEO 页面
-│  page-seo-generator-i18n│  ← 步骤 1（可选）：生成多语言页面
-└───────────┬─────────────┘
-            │
-            ▼
-┌─────────────────────────┐
-│  seo-image-generator    │  ← 步骤 2：生成配图素材
+│  page-seo-generator     │  ← Step 1: Generate English SEO page
+│  page-seo-generator-i18n│  ← Step 1 (optional): Generate multilingual pages
 └───────────┬─────────────┘
             │
             ▼
 ┌─────────────────────────┐
-│  page-seo-checker       │  ← 最终步骤：发布前质量检查
+│  seo-image-generator    │  ← Step 2: Generate visual assets
+└───────────┬─────────────┘
+            │
+            ▼
+┌─────────────────────────┐
+│  page-seo-checker       │  ← Final Step: Pre-publish quality check
 └─────────────────────────┘
 ```
 
 ---
 
-## 使用方式
+## Usage
 
-这些 Skill 需要在支持 Skill 机制的 AI Agent 环境中使用。每个 Skill 的 `SKILL.md` 文件中定义了完整的触发规则和工作流说明。
+These skills are designed to be used within an AI Agent environment that supports the Skill mechanism. Each skill's `SKILL.md` file defines complete trigger rules and workflow instructions.
 
-将本仓库作为项目目录，Agent 会自动发现并加载 `skills/` 目录下的所有 Skill。
+Use this repository as your project directory, and the Agent will automatically discover and load all skills under the `skills/` directory.
