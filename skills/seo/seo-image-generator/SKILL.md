@@ -1,10 +1,6 @@
 ---
 name: seo-image-generator
-description: >-
-  Generate visual asset prompts for SEO landing pages — banner (16:9, image-to-image with logo),
-  product introduction (1:1), why choose (1:1), and pain points (1:1). Then optionally execute
-  batch generation via image generation service. This skill should be used after page-seo-generator produces the
-  11-column SEO content, to create matching visual materials for the page.
+description: "Generate visual asset prompts for SEO landing pages — banner (16:9, image-to-image with logo), product introduction (1:1), why choose (1:1), and pain points (1:1). Then optionally execute batch generation via image generation service. This skill should be used after page-seo-generator produces the 11-column SEO content, to create matching visual materials for the page."
 agent_created: true
 ---
 

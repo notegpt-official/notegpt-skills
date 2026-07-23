@@ -1,6 +1,6 @@
 ---
 name: page-seo-generator
-description: This skill should be used when the user wants to generate a complete 11-column SEO landing page for a website. It handles the full workflow: keyword research, TDK generation, and structured content output. Triggers include requests like "generate an SEO page", "create a landing page", "generate TDK", "SEO content", "landing page SEO", or providing a keyword with SEO intent.
+description: "This skill should be used when the user wants to generate a complete 11-column SEO landing page for a website. It handles the full workflow: keyword research, TDK generation, and structured content output. Triggers include requests like 'generate an SEO page', 'create a landing page', 'generate TDK', 'SEO content', 'landing page SEO', or providing a keyword with SEO intent."
 agent_created: true
 ---
 

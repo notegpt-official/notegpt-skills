@@ -1,6 +1,6 @@
 ---
 name: page-seo-checker
-description: Check SEO compliance of any domain page based on internal SEO standards and page launch checklist, generating a visual HTML report. Automatically extracts domain from URL, supports production and test environments. Trigger keywords: check SEO, SEO check, check page SEO, page SEO compliance, SEO report. Activate when user provides a page URL and requests SEO compliance check.
+description: "Check SEO compliance of any domain page based on internal SEO standards and page launch checklist, generating a visual HTML report. Automatically extracts domain from URL, supports production and test environments. Trigger keywords: check SEO, SEO check, check page SEO, page SEO compliance, SEO report. Activate when user provides a page URL and requests SEO compliance check."
 agent_created: true
 ---
 

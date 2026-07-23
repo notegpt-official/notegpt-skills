@@ -1,6 +1,6 @@
 ---
 name: seo-keyword-difficulty
-description: SEO keyword difficulty assessment and competitor analysis Skill. Given a target keyword, automatically queries search volume, difficulty score, Top-10 competitor page TDK, Google Trends data, and outputs a comprehensive recommendation report to decide which keywords to target for traffic. Trigger words: keyword difficulty, keyword research, SEO keyword analysis, keyword selection, KD analysis, competitor TDK. This Skill applies to all SEO content projects, not limited to any specific website.
+description: "SEO keyword difficulty assessment and competitor analysis Skill. Given a target keyword, automatically queries search volume, difficulty score, Top-10 competitor page TDK, Google Trends data, and outputs a comprehensive recommendation report to decide which keywords to target for traffic. Trigger words: keyword difficulty, keyword research, SEO keyword analysis, keyword selection, KD analysis, competitor TDK. This Skill applies to all SEO content projects, not limited to any specific website."
 agent_created: true
 ---
 
