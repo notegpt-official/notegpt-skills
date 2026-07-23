@@ -8,7 +8,7 @@
 4. **Fallback to auto-generated** (`--write-auto-sub`) — usually available
 5. **Last resort: Whisper transcription** — if no subtitles exist, download audio with yt-dlp then continue via `references/whisper-transcription.md` (requires user confirmation)
 6. **Confirm the download** and show the user where the file is saved
-7. **Optionally clean up** the VTT format if the user wants plain text
+7. **Keep the VTT file** — it can be reused for SRT or other format conversion
 
 ## Installation Check
 
@@ -128,24 +128,24 @@ Use this to create meaningful filenames based on the video title. Clean the titl
 
 ## Post-Processing
 
-### Convert to Plain Text (Recommended)
+### Convert to Plain Text with Timestamps (Recommended)
 
-YouTube's auto-generated VTT files contain **duplicate lines** because captions are shown progressively with overlapping timestamps. Always deduplicate when converting to plain text while preserving the original speaking order.
+YouTube's auto-generated VTT files contain **duplicate lines** because captions are shown progressively with overlapping timestamps. Use the `subtitle_convert.py` script to parse VTT/SRT cues, deduplicate text, and output a clean `.txt` file. Both `.vtt` and `.srt` input formats are supported (auto-detected).
+
+Timestamps are **enabled by default**. Use `--no-timestamps` for plain text only.
 
 ```bash
-python3 -c "
-import sys, re
-seen = set()
-with open('transcript.en.vtt', 'r') as f:
-    for line in f:
-        line = line.strip()
-        if line and not line.startswith('WEBVTT') and not line.startswith('Kind:') and not line.startswith('Language:') and '-->' not in line:
-            clean = re.sub('<[^>]*>', '', line)
-            clean = clean.replace('&amp;', '&').replace('&gt;', '>').replace('&lt;', '<')
-            if clean and clean not in seen:
-                print(clean)
-                seen.add(clean)
-" > transcript.txt
+# With timestamps (default)
+python3 references/scripts/subtitle_convert.py transcript.en.vtt
+
+# Also supports SRT format
+python3 references/scripts/subtitle_convert.py transcript.en.srt
+
+# Or plain text without timestamps
+python3 references/scripts/subtitle_convert.py transcript.en.vtt --no-timestamps
+
+# Specify custom output path
+python3 references/scripts/subtitle_convert.py transcript.en.vtt -o output.txt
 ```
 
 ### Complete Post-Processing with Video Title
@@ -157,32 +157,22 @@ VIDEO_TITLE=$(yt-dlp --print "%(title)s" "YOUTUBE_URL" | tr '/' '_' | tr ':' '-'
 # Find the VTT file
 VTT_FILE=$(ls *.vtt | head -n 1)
 
-# Convert with deduplication
-python3 -c "
-import sys, re
-seen = set()
-with open('$VTT_FILE', 'r') as f:
-    for line in f:
-        line = line.strip()
-        if line and not line.startswith('WEBVTT') and not line.startswith('Kind:') and not line.startswith('Language:') and '-->' not in line:
-            clean = re.sub('<[^>]*>', '', line)
-            clean = clean.replace('&amp;', '&').replace('&gt;', '>').replace('&lt;', '<')
-            if clean and clean not in seen:
-                print(clean)
-                seen.add(clean)
-" > "${VIDEO_TITLE}.txt"
+# Convert with timestamps and deduplication
+python3 references/scripts/subtitle_convert.py "$VTT_FILE" -o "${VIDEO_TITLE}.txt"
 
 echo "✓ Saved to: ${VIDEO_TITLE}.txt"
-
-# Clean up VTT file
-rm "$VTT_FILE"
-echo "✓ Cleaned up temporary VTT file"
 ```
 
 ## Output Formats
 
-- **VTT format** (`.vtt`): Includes timestamps and formatting, good for video players
-- **Plain text** (`.txt`): Just the text content, good for reading or analysis
+- **VTT format** (`.vtt`): WebVTT subtitles with timestamps — yt-dlp's default. Use `subtitle_convert.py` to convert.
+- **SRT format** (`.srt`): SubRip subtitles — use `yt-dlp --sub-format srt` to download directly. Also convertible via `subtitle_convert.py`.
+- **Plain text with timestamps** (`.txt`): Timestamped text with separator lines produced by `subtitle_convert.py`, good for reading or analysis. Format:
+  ```
+  -------------------
+  HH:MM:SS - HH:MM:SS
+  subtitle text here
+  ```
 
 ## Tips
 
@@ -268,29 +258,13 @@ else
 fi
 
 # ============================================
-# STEP 6: Convert to readable plain text with deduplication
+# STEP 6: Convert to plain text with timestamps and deduplication
 # ============================================
 VTT_FILE=$(ls ${OUTPUT_NAME}*.vtt 2>/dev/null || ls *.vtt | head -n 1)
 if [ -f "$VTT_FILE" ]; then
-    echo "Converting to readable format and removing duplicates..."
-    python3 -c "
-import sys, re
-seen = set()
-with open('$VTT_FILE', 'r') as f:
-    for line in f:
-        line = line.strip()
-        if line and not line.startswith('WEBVTT') and not line.startswith('Kind:') and not line.startswith('Language:') and '-->' not in line:
-            clean = re.sub('<[^>]*>', '', line)
-            clean = clean.replace('&amp;', '&').replace('&gt;', '>').replace('&lt;', '<')
-            if clean and clean not in seen:
-                print(clean)
-                seen.add(clean)
-" > "${VIDEO_TITLE}.txt"
+    echo "Converting to readable format with timestamps and removing duplicates..."
+    python3 references/scripts/subtitle_convert.py "$VTT_FILE" -o "${VIDEO_TITLE}.txt"
     echo "✓ Saved to: ${VIDEO_TITLE}.txt"
-
-    # Clean up temporary VTT file
-    rm "$VTT_FILE"
-    echo "✓ Cleaned up temporary VTT file"
 else
     echo "⚠ No VTT file found to convert"
 fi
@@ -338,6 +312,7 @@ echo "✓ Complete!"
 - ✅ Always check what's available before attempting download (`--list-subs`)
 - ✅ Verify success at each step before proceeding to next
 - ✅ Ask user before large downloads (audio files, Whisper models)
+- ✅ Keep VTT files after conversion (they can be reused for other formats)
 - ✅ Clean up temporary files after processing
 - ✅ Provide clear feedback about what's happening at each stage
 - ✅ Handle errors gracefully with helpful messages
