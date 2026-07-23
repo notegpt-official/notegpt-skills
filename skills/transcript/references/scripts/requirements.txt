@@ -1,0 +1,7 @@
+faster-whisper==1.2.1
+click>=8.0.0
+torch==2.8.0
+torchaudio==2.8.0
+pyannote-audio==4.0.4
+numpy
+pandas
