@@ -478,12 +478,15 @@ def run_pipeline(input_path: Path, *, model_name: str, output_format: str,
 # CLI
 # ===========================================================================
 
-FORMAT_CHOICES = ["txt", "srt", "vtt", "json", "tsv"]
+	FORMAT_CHOICES = ["vtt", "txt", "srt", "json", "tsv"]
 
 
 @click.group()
 def cli():
     """Whisper Transcription -- Audio/Video to Text (faster-whisper).
+
+    Default output is VTT (canonical format). For other formats, either
+    pass --format or convert the VTT file via subtitle_convert.py.
 
     Always on: VAD filtering + audio normalization (16kHz mono).
     Optional:  --word-timestamps, --prompt, --diarize.
@@ -503,8 +506,8 @@ def cli():
 @click.argument("file", type=click.Path(exists=True))
 @click.option("--model", "-m", default="small", type=click.Choice(MODEL_CHOICES),
               help="Whisper model size (default: small)")
-@click.option("--format", "-f", "output_format", default="txt",
-              type=click.Choice(FORMAT_CHOICES), help="Output format")
+@click.option("--format", "-f", "output_format", default="vtt",
+              type=click.Choice(FORMAT_CHOICES), help="Output format (default: vtt)")
 @click.option("--output", "-o", type=click.Path(), help="Output file path")
 @click.option("--language", "-l", help="Language code (auto-detect if omitted)")
 @click.option("--prompt", help="Initial prompt -- names, acronyms for better accuracy")
@@ -528,7 +531,11 @@ def transcribe(file: str, model: str, output_format: str, output: Optional[str],
                diarize: bool, num_speakers: Optional[int],
                diarization_model: str,
                translate: bool, translate_to: str):
-    """Transcribe an audio/video file to text."""
+    """Transcribe an audio/video file to text.
+
+    Default output format is VTT. Convert to other formats (SRT/JSON/TSV/TXT)
+    via: python scripts/subtitle_convert.py input.vtt -f <format>
+    """
     input_path = Path(file)
     task = "translate" if translate else "transcribe"
 
@@ -560,8 +567,8 @@ def transcribe(file: str, model: str, output_format: str, output: Optional[str],
 @click.argument("folder", type=click.Path(exists=True))
 @click.option("--model", "-m", default="small", type=click.Choice(MODEL_CHOICES),
               help="Whisper model size (default: small)")
-@click.option("--format", "-f", "output_format", default="txt",
-              type=click.Choice(FORMAT_CHOICES), help="Output format")
+@click.option("--format", "-f", "output_format", default="vtt",
+              type=click.Choice(FORMAT_CHOICES), help="Output format (default: vtt)")
 @click.option("--output", "-o", type=click.Path(), help="Output directory")
 @click.option("--language", "-l", help="Language code (auto-detect if omitted)")
 @click.option("--prompt", help="Initial prompt -- names, acronyms for better accuracy")
@@ -580,7 +587,11 @@ def batch(folder: str, model: str, output_format: str, output: Optional[str],
           word_timestamps: bool, include_timestamps: bool,
           diarize: bool, num_speakers: Optional[int],
           diarization_model: str):
-    """Batch transcribe all audio/video files in a folder."""
+    """Batch transcribe all audio/video files in a folder.
+
+    Default output format is VTT. Convert to other formats via
+    subtitle_convert.py.
+    """
     input_dir = Path(folder)
     output_dir = Path(output) if output else input_dir
     output_dir.mkdir(parents=True, exist_ok=True)

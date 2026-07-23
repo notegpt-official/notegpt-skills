@@ -1,20 +1,29 @@
 #!/usr/bin/env python3
 """
-Subtitle to TXT converter — Convert VTT/SRT subtitle files to clean timestamped text.
+Subtitle format converter — Convert between VTT, SRT, JSON, TSV, and TXT formats.
 
-Supports both VTT (WebVTT) and SRT (SubRip) formats. Auto-detects format by file
-extension, falling back to content sniffing.
+Primary workflow:
+  1. Whisper generates a VTT file (the canonical format)
+  2. This script converts VTT to any other needed format
 
-Parses subtitle cues, deduplicates overlapping text, and outputs a readable .txt
-file with optional timestamps.
+Supports:
+  - VTT → SRT    (YouTube upload, video players)
+  - VTT → JSON   (programmatic access, timestamps)
+  - VTT → TSV    (spreadsheet analysis)
+  - VTT → TXT    (reading, blog posts, with optional timestamps)
+  - SRT → TXT    (clean timestamped text from existing SRT files)
 
 Usage:
-    python subtitle_convert.py transcript.en.vtt
-    python subtitle_convert.py transcript.en.srt -o output.txt
-    python subtitle_convert.py transcript.en.vtt --no-timestamps
+    python subtitle_convert.py transcript.en.vtt -f srt -o transcript.srt
+    python subtitle_convert.py transcript.en.vtt -f json -o transcript.json
+    python subtitle_convert.py transcript.en.vtt -f tsv -o transcript.tsv
+    python subtitle_convert.py transcript.en.vtt -o transcript.txt        # default: txt
+    python subtitle_convert.py transcript.en.vtt --no-timestamps           # plain text
+    python subtitle_convert.py transcript.en.srt -o transcript.txt         # SRT → TXT
 """
 
 import argparse
+import json
 import re
 import sys
 from enum import Enum, auto
@@ -33,6 +42,8 @@ TIMESTAMP_RE = re.compile(
 )
 
 VTT_HEADER_PATTERNS = ("WEBVTT", "Kind:", "Language:")
+
+OUTPUT_FORMATS = ["txt", "srt", "json", "tsv"]
 
 
 def detect_format(file_path: Path) -> SubFormat:
@@ -64,6 +75,16 @@ def time_to_display(ts: str) -> str:
     return f"{h}:{m}:{s}"
 
 
+def vtt_to_srt_timestamp(ts: str) -> str:
+    """Convert VTT timestamp (HH:MM:SS.mmm) to SRT timestamp (HH:MM:SS,mmm)."""
+    return ts.replace(".", ",", 2)  # Replace only the last dot (before milliseconds)
+
+
+def srt_to_vtt_timestamp(ts: str) -> str:
+    """Convert SRT timestamp (HH:MM:SS,mmm) to VTT timestamp (HH:MM:SS.mmm)."""
+    return ts.replace(",", ".", 2)  # Replace only the last comma (before milliseconds)
+
+
 def is_blank_or_index(line: str, fmt: SubFormat) -> bool:
     """Check if a line is a blank line, or (for SRT) a cue index."""
     stripped = line.strip()
@@ -81,13 +102,14 @@ def is_header_line(line: str, fmt: SubFormat) -> bool:
     return False
 
 
-def parse_cues(content: str, fmt: SubFormat) -> list[tuple[str, str]]:
-    """Parse subtitle content into a list of (timestamp_line, text) tuples.
+def parse_cues(content: str, fmt: SubFormat) -> list[dict]:
+    """Parse subtitle content into a list of cue dicts.
 
+    Each cue: {index, start, end, start_display, end_display, text}
     Handles both VTT and SRT formats. Deduplicates by text content.
     """
     blocks = re.split(r"\n\s*\n", content.strip())
-    cues: list[tuple[str, str]] = []
+    cues: list[dict] = []
     seen: set[str] = set()
 
     for block in blocks:
@@ -126,19 +148,84 @@ def parse_cues(content: str, fmt: SubFormat) -> list[tuple[str, str]]:
         if text in seen:
             continue
         seen.add(text)
-        cues.append((ts_line, text))
+
+        m = TIMESTAMP_RE.search(ts_line)
+        cues.append({
+            "start_raw": m.group(1),
+            "end_raw": m.group(2),
+            "start_display": time_to_display(m.group(1)),
+            "end_display": time_to_display(m.group(2)),
+            "text": text,
+        })
 
     return cues
 
 
-def convert_to_txt(
+# ===========================================================================
+# Format writers
+# ===========================================================================
+
+def write_txt(cues: list[dict], output_path: Path | None,
+              include_timestamps: bool) -> int:
+    """Write cues as plain text with optional timestamps."""
+    if output_path is None:
+        out = sys.stdout
+    else:
+        out = open(output_path, "w", encoding="utf-8")
+
+    try:
+        for i, cue in enumerate(cues):
+            if i > 0:
+                out.write("\n")
+            if include_timestamps:
+                out.write(f"{cue['start_display']} - {cue['end_display']}\n")
+            out.write(cue["text"] + "\n")
+    finally:
+        if output_path is not None:
+            out.close()
+
+    return len(cues)
+
+
+def write_srt(cues: list[dict], output_path: Path) -> int:
+    """Write cues as SRT (SubRip) format."""
+    with open(output_path, "w", encoding="utf-8") as f:
+        for i, cue in enumerate(cues, 1):
+            start = vtt_to_srt_timestamp(cue["start_raw"])
+            end = vtt_to_srt_timestamp(cue["end_raw"])
+            f.write(f"{i}\n{start} --> {end}\n{cue['text']}\n\n")
+    return len(cues)
+
+
+def write_json(cues: list[dict], output_path: Path) -> int:
+    """Write cues as JSON array."""
+    with open(output_path, "w", encoding="utf-8") as f:
+        json.dump(cues, f, indent=2, ensure_ascii=False)
+    return len(cues)
+
+
+def write_tsv(cues: list[dict], output_path: Path) -> int:
+    """Write cues as TSV (tab-separated values)."""
+    with open(output_path, "w", encoding="utf-8") as f:
+        f.write("start\tend\ttext\n")
+        for cue in cues:
+            f.write(f"{cue['start_raw']}\t{cue['end_raw']}\t{cue['text']}\n")
+    return len(cues)
+
+
+# ===========================================================================
+# Main conversion entry point
+# ===========================================================================
+
+def convert(
     input_path: Path,
     output_path: Path | None = None,
+    output_format: str = "txt",
     include_timestamps: bool = True,
 ) -> int:
-    """Convert a subtitle file (VTT or SRT) to timestamped plain text.
+    """Convert a subtitle file between formats.
 
-    If output_path is None, writes to stdout.
+    If output_path is None, writes to stdout (txt format only).
     Returns the number of unique cues written.
     """
     fmt = detect_format(input_path)
@@ -148,34 +235,28 @@ def convert_to_txt(
 
     cues = parse_cues(content, fmt)
 
-    if output_path is None:
-        out = sys.stdout
+    if output_format == "txt":
+        return write_txt(cues, output_path, include_timestamps)
+    elif output_format == "srt":
+        if output_path is None:
+            output_path = input_path.with_suffix(".srt")
+        return write_srt(cues, output_path)
+    elif output_format == "json":
+        if output_path is None:
+            output_path = input_path.with_suffix(".json")
+        return write_json(cues, output_path)
+    elif output_format == "tsv":
+        if output_path is None:
+            output_path = input_path.with_suffix(".tsv")
+        return write_tsv(cues, output_path)
     else:
-        out = open(output_path, "w", encoding="utf-8")
-
-    try:
-        for i, (ts_line, text) in enumerate(cues):
-            if i > 0:
-                out.write("\n")
-
-            if include_timestamps:
-                m = TIMESTAMP_RE.search(ts_line)
-                if m:
-                    start = time_to_display(m.group(1))
-                    end = time_to_display(m.group(2))
-                    out.write("-------------------\n")
-                    out.write(f"{start} - {end}\n")
-            out.write(text + "\n")
-    finally:
-        if output_path is not None:
-            out.close()
-
-    return len(cues)
+        print(f"Error: unknown output format: {output_format}", file=sys.stderr)
+        sys.exit(1)
 
 
 def main() -> None:
     parser = argparse.ArgumentParser(
-        description="Convert VTT/SRT subtitle files to clean timestamped plain text.",
+        description="Convert subtitle files between VTT, SRT, JSON, TSV, and TXT formats.",
     )
     parser.add_argument(
         "input",
@@ -183,16 +264,23 @@ def main() -> None:
         help="Path to the subtitle file (.vtt or .srt)",
     )
     parser.add_argument(
+        "-f", "--format",
+        type=str,
+        choices=OUTPUT_FORMATS,
+        default="txt",
+        help="Output format (default: txt)",
+    )
+    parser.add_argument(
         "-o", "--output",
         type=str,
         default=None,
-        help="Output .txt file path (default: print to stdout)",
+        help="Output file path (auto-generated if omitted; stdout for txt)",
     )
     parser.add_argument(
         "--no-timestamps",
         action="store_true",
         default=False,
-        help="Omit timestamps, output plain text only",
+        help="Omit timestamps (txt output only)",
     )
 
     args = parser.parse_args()
@@ -203,17 +291,22 @@ def main() -> None:
         sys.exit(1)
 
     output_path = Path(args.output) if args.output else None
-    fmt = detect_format(input_path)
-    fmt_name = "VTT" if fmt == SubFormat.VTT else "SRT"
+    src_fmt = detect_format(input_path)
+    src_name = "VTT" if src_fmt == SubFormat.VTT else "SRT"
     include_timestamps = not args.no_timestamps
 
-    count = convert_to_txt(input_path, output_path, include_timestamps)
+    count = convert(input_path, output_path, args.format, include_timestamps)
 
-    mode = "with timestamps" if include_timestamps else "plain text"
     if output_path:
-        print(f"✓ Converted {count} unique cues from {fmt_name} ({mode})")
+        mode = "with timestamps" if include_timestamps else "plain text"
+        print(f"✓ Converted {count} unique cues: {src_name} → {args.format.upper()} ({mode})")
         print(f"  Input:  {input_path}")
         print(f"  Output: {output_path}")
+    elif args.format != "txt":
+        out_path = input_path.with_suffix(f".{args.format}")
+        print(f"✓ Converted {count} unique cues: {src_name} → {args.format.upper()}")
+        print(f"  Input:  {input_path}")
+        print(f"  Output: {out_path}")
 
 
 if __name__ == "__main__":
