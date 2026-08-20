@@ -1,11 +1,15 @@
 # notegpt-skills
 
-AI Agent Skills Collection — covering browser automation, audio/video transcription, and complete SEO workflows.
+AI Agent Skills Collection — covering browser automation, audio/video transcription, document & spreadsheet tools, data analysis, deep research, and complete SEO workflows.
 
 ## Directory Structure
 
 ```
 skills/
+├── ai-documents/             # Document Creation, Editing & Improvement
+├── ai-sheets/                # Spreadsheet Creation & Analysis
+├── data-analysis/            # Data Insight Reports with Charts
+├── deep-research/            # In-depth Research Reports
 ├── browser-automation/       # Browser Automation (Anti-Detection)
 ├── transcript/               # Audio/Video Transcription
 └── seo/                      # SEO Automation Pipeline
@@ -109,6 +113,38 @@ A pre-publish **quality gate** performing a 12-point automated check on publishe
 | 12 | Brand Name Count & Zero Articles | 5 |
 
 **Scoring**: ≥80% 🟢 Ready to Publish / 60-79% 🟡 Fix Before Publishing / <60% 🔴 Not Ready
+
+---
+
+### 4. ai-documents — Document Creation
+
+Create, edit, or improve documents according to the user's requirements. Always generates a file — **Markdown (.md)** by default, or the requested format.
+
+**Trigger words**: create document, write document, edit document, improve document, generate document, write a report
+
+---
+
+### 5. ai-sheets — Spreadsheet Creation & Analysis
+
+Create, improve, or analyze spreadsheets according to the user's requirements. Always generates a file — if no format is specified, asks the user to choose (visual report `.html`, spreadsheet `.xlsx`, or another format; multiple formats can be selected). HTML output includes an easy-to-understand visual insight report with professional charts.
+
+**Trigger words**: create spreadsheet, make spreadsheet, create xlsx, make an Excel file, improve spreadsheet, analyze spreadsheet
+
+---
+
+### 6. data-analysis — Visual Insight Reports
+
+Analyze the user's data and generate easy-to-understand visual insight reports with professional charts. Always generates a file — **HTML (.html)** by default, or the requested format.
+
+**Trigger words**: analyze data, data analysis, data insight, visualize data, chart report, visual report
+
+---
+
+### 7. deep-research — In-depth Research Reports
+
+Conduct systematic and in-depth research on a specified topic, generating a detailed report with properly cited sources while carefully verifying the accuracy and credibility of the information. Always delivers **two files**: an HTML report with charts and visualizations, plus a Markdown version derived from the HTML.
+
+**Trigger words**: deep research, research topic, investigate, research report, in-depth research, write a research report
 
 ---
 

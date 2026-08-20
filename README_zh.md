@@ -1,11 +1,15 @@
 # notegpt-skills
 
-AI Agent Skills 集合 — 覆盖浏览器自动化、音视频转录和完整的 SEO 工作流。
+AI Agent Skills 集合 — 覆盖浏览器自动化、音视频转录、文档与表格工具、数据分析、深度研究以及完整的 SEO 工作流。
 
 ## 目录结构
 
 ```
 skills/
+├── ai-documents/             # 文档创建、编辑与改进
+├── ai-sheets/                # 电子表格创建与分析
+├── data-analysis/            # 数据洞察报告（可视化图表）
+├── deep-research/            # 深度研究报告
 ├── browser-automation/       # 浏览器自动化（反检测）
 ├── transcript/               # 音视频转文字
 └── seo/                      # SEO 自动化管线
@@ -109,6 +113,38 @@ skills/
 | 12 | 品牌名计数 & 零冠词 | 5 |
 
 **评分标准**：≥80% 🟢 可发布 / 60-79% 🟡 修复后发布 / <60% 🔴 不可发布
+
+---
+
+### 4. ai-documents — 文档创建
+
+根据用户需求创建、编辑或改进文档。始终生成文件 —— 默认 **Markdown (.md)**，或按用户指定格式输出。
+
+**触发词**：create document、write document、edit document、improve document、generate document、write a report
+
+---
+
+### 5. ai-sheets — 电子表格创建与分析
+
+根据用户需求创建、改进或分析电子表格。始终生成文件 —— 若未指定格式，询问用户选择（可视化报告 `.html`、电子表格 `.xlsx` 或其他格式，可多选）。HTML 输出包含易于理解、带专业图表的可视化洞察报告。
+
+**触发词**：create spreadsheet、make spreadsheet、create xlsx、make an Excel file、improve spreadsheet、analyze spreadsheet
+
+---
+
+### 6. data-analysis — 数据洞察报告
+
+分析用户数据，生成易于理解、带专业图表的可视化洞察报告。始终生成文件 —— 默认 **HTML (.html)**，或按用户指定格式输出。
+
+**触发词**：analyze data、data analysis、data insight、visualize data、chart report、visual report
+
+---
+
+### 7. deep-research — 深度研究报告
+
+对指定主题进行系统、深入的调研，生成带正确引用来源的详细报告，并仔细核实信息的准确性与可信度。始终交付**两个文件**：带图表可视化的 HTML 报告，以及基于 HTML 内容生成的 Markdown 版本。
+
+**触发词**：deep research、research topic、investigate、research report、in-depth research、write a research report
 
 ---
 
