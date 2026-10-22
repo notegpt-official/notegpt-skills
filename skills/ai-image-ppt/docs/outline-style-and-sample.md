@@ -64,7 +64,7 @@ I recommend a clean, professional work summary for colleagues, using light backg
 - Audience: students, teachers, or colleagues? Suggested: colleagues.
 - Scenario: teaching slides, picture book, work summary, or business report? Suggested: work summary.
 - Tone: neutral, friendly, professional, educational, technical, or academic? Suggested: professional.
-- Slide count: 8, 10, 12, or another total? Suggested: 10 slides including cover and closing.
+- Slide count: 8, 12, 16, or another total? Suggested: 12 slides including cover and closing.
 ```
 
 ## Plan The Deck Outline
