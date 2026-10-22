@@ -1,20 +1,20 @@
-# 清爽专业风
+# Clean Professional
 
-**适用场景:**
-- 毕业答辩
-- 工作总结
-- 工作 review
-- 技术分享
-- 项目复盘
-- 晋升述职
-- 阶段性成果汇报
+**Use Cases:**
+- Thesis defenses
+- Work summaries
+- Performance reviews
+- Technical talks
+- Project retrospectives
+- Promotion presentations
+- Progress and milestone reports
 
-**GPT-Image-2 风格 Brief:**
+**GPT-Image-2 Style Brief:**
 ```json
 {
   "type": "16:9 full-slide PowerPoint image",
-  "style_name": "清爽专业风",
-  "best_for": "毕业答辩、工作总结、工作 review、技术分享、项目复盘和晋升述职等需要清晰表达过程、成果、问题和下一步的场景",
+  "style_name": "Clean Professional",
+  "best_for": "Thesis defenses, work summaries, performance reviews, technical talks, project retrospectives, and promotion presentations requiring clear communication of processes, results, problems, and next steps",
   "visual_direction": "clean modern professional deck, calm technical presentation, structured evidence-driven layout, readable pragmatic visual system, light background with crisp hierarchy",
   "canvas": {
     "aspect_ratio": "16:9",
@@ -48,8 +48,8 @@
       "name": "work review summary",
       "sections": [
         {"position": "top", "count": 1, "labels": ["slide title and context subtitle"]},
-        {"position": "left column", "count": 3, "labels": ["目标", "完成情况", "关键结果"]},
-        {"position": "right column", "count": 2, "labels": ["问题与风险", "下一步计划"]},
+        {"position": "left column", "count": 3, "labels": ["Objectives", "Completion Status", "Key Results"]},
+        {"position": "right column", "count": 2, "labels": ["Issues and Risks", "Next Steps"]},
         {"position": "bottom", "count": 1, "labels": ["one-sentence takeaway"]}
       ]
     },
@@ -58,18 +58,18 @@
       "sections": [
         {"position": "top-left", "count": 1, "labels": ["topic title and motivation"]},
         {"position": "center", "count": 1, "labels": ["architecture / workflow / method diagram"]},
-        {"position": "right", "count": 3, "labels": ["核心机制", "实践经验", "注意事项"]},
+        {"position": "right", "count": 3, "labels": ["Core Mechanism", "Practical Experience", "Considerations"]},
         {"position": "bottom", "count": 3, "labels": ["before", "after", "impact"]}
       ]
     },
     {
       "name": "graduation defense evidence slide",
       "sections": [
-        {"position": "top", "count": 1, "labels": ["研究问题 / 答辩主题"]},
-        {"position": "left", "count": 1, "labels": ["方法路线图"]},
-        {"position": "center", "count": 2, "labels": ["实验/项目证据", "关键数据"]},
-        {"position": "right", "count": 1, "labels": ["结论与贡献"]},
-        {"position": "bottom", "count": 1, "labels": ["限制与后续工作"]}
+        {"position": "top", "count": 1, "labels": ["Research Question / Defense Topic"]},
+        {"position": "left", "count": 1, "labels": ["Method Roadmap"]},
+        {"position": "center", "count": 2, "labels": ["Experimental / Project Evidence", "Key Data"]},
+        {"position": "right", "count": 1, "labels": ["Conclusions and Contributions"]},
+        {"position": "bottom", "count": 1, "labels": ["Limitations and Future Work"]}
       ]
     }
   ],

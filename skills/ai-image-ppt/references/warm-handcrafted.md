@@ -1,20 +1,20 @@
-# 温暖手工风
+# Warm Handcrafted
 
-**适用场景:**
-- 儿童教育
-- 文化活动
-- 手工艺展示
-- 温馨主题
-- 亲子活动
-- 艺术工作坊
-- 社区公益项目
+**Use Cases:**
+- Children's education
+- Cultural events
+- Craft showcases
+- Heartwarming topics
+- Parent-child activities
+- Art workshops
+- Community and public-interest projects
 
-**GPT-Image-2 风格 Brief:**
+**GPT-Image-2 Style Brief:**
 ```json
 {
   "type": "16:9 full-slide PowerPoint image",
-  "style_name": "温暖手工风",
-  "best_for": "教育、公益、文化、成长、社区和需要温度感的主题演示",
+  "style_name": "Warm Handcrafted",
+  "best_for": "Education, public-interest initiatives, culture, personal growth, community projects, and presentations that need a warm tone",
   "visual_direction": "warm handmade paper collage slide, tactile paper craft, gentle human-centered storytelling, cozy scrapbook composition",
   "canvas": {
     "aspect_ratio": "16:9",

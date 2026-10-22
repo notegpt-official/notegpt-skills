@@ -1,20 +1,20 @@
-# 创意杂志风
+# Creative Magazine
 
-**适用场景:**
-- 创意提案
-- 品牌展示
-- 设计作品集
-- 文化活动
-- 时尚发布
-- 艺术展览
-- 创意工作室介绍
+**Use Cases:**
+- Creative proposals
+- Brand presentations
+- Design portfolios
+- Cultural events
+- Fashion launches
+- Art exhibitions
+- Creative studio introductions
 
-**GPT-Image-2 风格 Brief:**
+**GPT-Image-2 Style Brief:**
 ```json
 {
   "type": "16:9 full-slide PowerPoint image",
-  "style_name": "创意杂志风",
-  "best_for": "需要强视觉记忆点、品牌个性或传播感的分享型演示",
+  "style_name": "Creative Magazine",
+  "best_for": "Presentations that need strong visual recall, brand personality, or shareable appeal",
   "visual_direction": "high-end editorial magazine spread, bold asymmetry, art-directed composition, graphic tension, premium creative layout",
   "canvas": {
     "aspect_ratio": "16:9",

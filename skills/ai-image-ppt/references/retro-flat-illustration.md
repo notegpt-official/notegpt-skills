@@ -1,20 +1,20 @@
-# 复古扁平插画风
+# Retro Flat Illustration
 
-**适用场景:**
-- 文化创意项目展示
-- 品牌故事讲述
-- 旅游景点介绍
-- 复古产品发布
-- 艺术设计作品集
-- 创意活动宣传
-- 生活方式类演示
+**Use Cases:**
+- Cultural and creative project showcases
+- Brand storytelling
+- Tourist attraction introductions
+- Retro product launches
+- Art and design portfolios
+- Creative event promotion
+- Lifestyle presentations
 
-**GPT-Image-2 风格 Brief:**
+**GPT-Image-2 Style Brief:**
 ```json
 {
   "type": "16:9 full-slide PowerPoint image",
-  "style_name": "复古扁平插画风",
-  "best_for": "文化创意、品牌故事、生活方式、城市旅游和带叙事感的主题演示",
+  "style_name": "Retro Flat Illustration",
+  "best_for": "Cultural and creative projects, brand stories, lifestyle topics, urban tourism, and narrative presentations",
   "visual_direction": "retro flat vector illustration slide, cream paper texture, monoline black outlines, vintage palette, playful handcrafted design",
   "canvas": {
     "aspect_ratio": "16:9",

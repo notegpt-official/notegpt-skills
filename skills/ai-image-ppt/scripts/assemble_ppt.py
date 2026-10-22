@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """
-PPT 组装脚本
+PPT assembly script
 
-将一个目录中的幻灯片图片组装成 PowerPoint 演示文稿。
-每张图片会被插入为一页幻灯片，充满整个页面。
+Assemble slide images from a directory into a PowerPoint presentation.
+Each image becomes one slide and fills the entire canvas.
 """
 
 import argparse
@@ -29,35 +29,35 @@ def dependency_hint() -> str:
         "image_ppt_runtime.py",
     )
     return (
-        f"请运行: python3 {runtime_script} bootstrap\n"
-        f"或直接运行: {python} -m pip install -r "
+        f"Run: python3 {runtime_script} bootstrap\n"
+        f"Or run directly: {python} -m pip install -r "
         f"{os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'requirements.txt')}"
     )
 
 
 def get_slide_images(ppt_project_dir: str) -> List[str]:
     """
-    获取幻灯片图片文件列表，按页码排序
+    Get slide image paths sorted by slide number.
 
     Args:
-        ppt_project_dir: PPT 项目目录（包含 origin_image 子目录）
+        ppt_project_dir: PPT project directory containing the origin_image subdirectory
 
     Returns:
-        按顺序排列的图片文件路径列表
+        Image file paths in slide order
     """
-    # 从 origin_image 子目录读取
+    # Read from the origin_image subdirectory
     origin_image_dir = os.path.join(ppt_project_dir, "origin_image")
 
     if not os.path.exists(origin_image_dir):
-        print(f"错误：origin_image 目录不存在: {origin_image_dir}")
+        print(f"Error: origin_image directory does not exist: {origin_image_dir}")
         return []
 
-    print(f"从 origin_image 目录读取图片: {origin_image_dir}")
+    print(f"Reading images from origin_image: {origin_image_dir}")
 
-    # 支持的图片格式
+    # Supported image formats
     image_extensions = {'.png', '.jpg', '.jpeg', '.gif', '.bmp'}
 
-    # 只获取正式幻灯片图片，避免 sample_slide.png、草稿图或参考图被误装入 PPT。
+    # Include only final slide images, excluding sample_slide.png, drafts, and references.
     slide_name_pattern = re.compile(r"^slide_(\d+)\.(png|jpe?g|gif|bmp)$", re.IGNORECASE)
     image_files = []
     for file in os.listdir(origin_image_dir):
@@ -72,8 +72,8 @@ def get_slide_images(ppt_project_dir: str) -> List[str]:
         stem = os.path.splitext(filename)[0]
         return (int(re.search(r"^slide_(\d+)", stem).group(1)), filename.lower())
 
-    # 按页码排序，避免 slide_10 排在 slide_2 前面。
-    # 同页码多文件时按文件名稳定排序。
+    # Sort numerically so slide_2 precedes slide_10.
+    # Use filenames as a stable tie-breaker for equal slide numbers.
     image_files.sort(key=slide_sort_key)
 
     return image_files
@@ -81,12 +81,12 @@ def get_slide_images(ppt_project_dir: str) -> List[str]:
 
 def load_speaker_notes(ppt_project_dir: str) -> Dict[int, str]:
     """
-    从 speech.md 读取每页演讲备注。
+    Load per-slide speaker notes from speech.md.
 
-    支持以下标题格式：
-    - ## Slide 1: 标题
-    - ### Slide 1: 标题
-    - ## 第 1 页：标题
+    Supported heading formats:
+    - ## Slide 1: Title
+    - ### Slide 1: Title
+    - Chinese numbered slide headings are also supported.
     """
     speech_path = os.path.join(ppt_project_dir, "speech.md")
     if not os.path.exists(speech_path):
@@ -98,7 +98,7 @@ def load_speaker_notes(ppt_project_dir: str) -> Dict[int, str]:
     notes: Dict[int, str] = {}
     current_slide: Optional[int] = None
     current_lines: List[str] = []
-    heading_pattern = re.compile(r"^#{2,4}\s*(?:Slide\s*(\d+)|第\s*(\d+)\s*页)\b.*$", re.IGNORECASE)
+    heading_pattern = re.compile(r"^#{2,4}\s*(?:Slide\s*(\d+)|\u7b2c\s*(\d+)\s*\u9875)\b.*$", re.IGNORECASE)
 
     def flush_current() -> None:
         if current_slide is None:
@@ -128,34 +128,34 @@ def compress_image_if_needed(
     quality_step: int = 5
 ) -> Optional[str]:
     """
-    如果图片超过指定大小，压缩图片并返回临时文件路径
+    Compress oversized images and return the temporary file path.
 
     Args:
-        image_path: 原始图片路径
-        max_size_mb: 最大文件大小（MB）
-        quality_step: 每次降低的质量步进
+        image_path: Original image path
+        max_size_mb: Maximum file size in MB
+        quality_step: Quality decrement per compression attempt
 
     Returns:
-        str: 如果需要压缩，返回临时文件路径；否则返回 None
+        str: Temporary file path if compression is needed; otherwise None
     """
     max_size_bytes = max_size_mb * 1024 * 1024
 
-    # 检查原始文件大小
+    # Check the original file size
     file_size = os.path.getsize(image_path)
 
     if file_size <= max_size_bytes:
-        # 不需要压缩
+        # No compression needed
         return None
 
-    print(f"  图片大小 {file_size / 1024 / 1024:.2f}MB，需要压缩...")
+    print(f"  Image size {file_size / 1024 / 1024:.2f}MB, compression needed...")
 
     try:
         from PIL import Image
 
-        # 打开图片
+        # Open the image
         img = Image.open(image_path)
 
-        # 转换 RGBA 到 RGB（如果需要保存为 JPEG）
+        # Convert RGBA to RGB for JPEG output
         if img.mode in ('RGBA', 'LA', 'P'):
             background = Image.new('RGB', img.size, (255, 255, 255))
             if img.mode == 'P':
@@ -163,24 +163,24 @@ def compress_image_if_needed(
             background.paste(img, mask=img.split()[-1] if img.mode in ('RGBA', 'LA') else None)
             img = background
 
-        # 创建临时文件
+        # Create a temporary file
         temp_fd, temp_path = tempfile.mkstemp(suffix='.jpg')
         os.close(temp_fd)
 
-        # 从高质量开始尝试压缩
+        # Start compression at high quality
         quality = 95
         while quality > 20:
             img.save(temp_path, 'JPEG', quality=quality, optimize=True)
             compressed_size = os.path.getsize(temp_path)
 
             if compressed_size <= max_size_bytes:
-                print(f"  压缩成功: {compressed_size / 1024 / 1024:.2f}MB (质量: {quality})")
+                print(f"  Compressed successfully: {compressed_size / 1024 / 1024:.2f}MB (quality: {quality})")
                 return temp_path
 
             quality -= quality_step
 
-        # 如果还是太大，尝试调整尺寸
-        print(f"  质量压缩不足，尝试缩小尺寸...")
+        # Try resizing if the image is still too large
+        print(f"  Quality reduction was insufficient; trying smaller dimensions...")
         scale = 0.9
         while scale > 0.3:
             new_width = int(img.width * scale)
@@ -191,21 +191,21 @@ def compress_image_if_needed(
             compressed_size = os.path.getsize(temp_path)
 
             if compressed_size <= max_size_bytes:
-                print(f"  压缩成功: {compressed_size / 1024 / 1024:.2f}MB (缩放: {scale:.0%})")
+                print(f"  Compressed successfully: {compressed_size / 1024 / 1024:.2f}MB (scale: {scale:.0%})")
                 return temp_path
 
             scale -= 0.1
 
-        # 实在压不下去了，返回最后的结果
-        print(f"  警告：无法压缩到 {max_size_mb}MB 以下，使用最小尺寸版本")
+        # Return the last result if the size limit cannot be reached
+        print(f"  Warning: could not compress below {max_size_mb}MB; using the smallest version")
         return temp_path
 
     except ImportError:
-        print("错误：未安装 Pillow 库")
+        print("Error: Pillow is not installed")
         print(dependency_hint())
         return None
     except Exception as e:
-        print(f"  警告：图片压缩失败: {e}")
+        print(f"  Warning: image compression failed: {e}")
         if 'temp_path' in locals() and os.path.exists(temp_path):
             os.remove(temp_path)
         return None
@@ -218,31 +218,31 @@ def create_presentation(
     speaker_notes: Optional[Dict[int, str]] = None,
 ) -> bool:
     """
-    创建 PowerPoint 演示文稿
+    Create a PowerPoint presentation.
 
     Args:
-        image_files: 幻灯片图片文件列表
-        output_path: 输出 PPT 文件路径
-        aspect_ratio: 幻灯片宽高比（16:9 默认、4:3、1:1、3:4、9:16、21:9）
+        image_files: List of slide image paths
+        output_path: Output PPT file path
+        aspect_ratio: Slide aspect ratio (default: 16:9; also 4:3, 1:1, 3:4, 9:16, 21:9)
 
     Returns:
-        bool: 成功返回 True，失败返回 False
+        bool: True on success, False on failure
     """
     try:
         try:
             from pptx import Presentation
             from pptx.util import Inches
         except ImportError:
-            print("错误：未安装 python-pptx 库")
+            print("Error: python-pptx is not installed")
             print(dependency_hint())
             return False
 
-        # 创建演示文稿
+        # Create the presentation
         prs = Presentation()
 
-        # 设置幻灯片尺寸
+        # Set slide dimensions
         if aspect_ratio not in SUPPORTED_ASPECT_RATIOS:
-            print(f"警告：不支持的宽高比 {aspect_ratio}，使用默认值 16:9")
+            print(f"Warning: unsupported aspect ratio {aspect_ratio}; using the default 16:9")
             aspect_ratio = "16:9"
         ratio_width, ratio_height = map(int, aspect_ratio.split(":"))
         prs.slide_width = Inches(10)
@@ -250,28 +250,28 @@ def create_presentation(
 
         speaker_notes = speaker_notes or {}
 
-        # 添加每一页幻灯片
+        # Add each slide
         temp_files_to_cleanup = []
         for i, image_path in enumerate(image_files, 1):
             if not os.path.exists(image_path):
-                print(f"警告：图片文件不存在: {image_path}")
+                print(f"Warning: image file does not exist: {image_path}")
                 continue
 
-            # 压缩图片（如果需要）
+            # Compress the image if needed
             compressed_path = compress_image_if_needed(image_path, max_size_mb=2.0)
 
-            # 使用压缩后的图片或原图
+            # Use the compressed image or the original
             image_to_use = compressed_path if compressed_path else image_path
 
-            # 记录临时文件以便后续清理
+            # Track temporary files for cleanup
             if compressed_path:
                 temp_files_to_cleanup.append(compressed_path)
 
-            # 使用空白布局（索引 6）
+            # Use the blank layout (index 6)
             blank_slide_layout = prs.slide_layouts[6]
             slide = prs.slides.add_slide(blank_slide_layout)
 
-            # 将图片添加到幻灯片，充满整个页面
+            # Add the image to fill the entire slide
             slide.shapes.add_picture(
                 image_to_use,
                 left=0,
@@ -286,37 +286,37 @@ def create_presentation(
                 notes_frame.clear()
                 notes_frame.text = note_text
 
-            print(f"✓ 已添加第 {i} 页: {os.path.basename(image_path)}")
+            print(f"✓ Added slide {i}: {os.path.basename(image_path)}")
 
-        # 确保输出目录存在
+        # Ensure the output directory exists
         output_dir = os.path.dirname(output_path)
         if output_dir and not os.path.exists(output_dir):
             os.makedirs(output_dir)
 
-        # 保存演示文稿
+        # Save the presentation
         prs.save(output_path)
-        print(f"\n✓ PPT 文件已保存: {output_path}")
-        print(f"  总页数: {len(image_files)}")
+        print(f"\n✓ PPT saved: {output_path}")
+        print(f"  Total slides: {len(image_files)}")
         if speaker_notes:
             matched_notes = sum(1 for i in range(1, len(image_files) + 1) if speaker_notes.get(i))
-            print(f"  已写入备注: {matched_notes}/{len(image_files)} 页")
+            print(f"  Notes written: {matched_notes}/{len(image_files)} slides")
 
-        # 清理临时文件
+        # Clean up temporary files
         for temp_file in temp_files_to_cleanup:
             try:
                 if os.path.exists(temp_file):
                     os.remove(temp_file)
             except Exception as e:
-                print(f"警告：清理临时文件失败 {temp_file}: {e}")
+                print(f"Warning: failed to clean up temporary file {temp_file}: {e}")
 
         return True
 
     except Exception as e:
-        print(f"错误：创建 PPT 失败: {e}")
+        print(f"Error: failed to create PPT: {e}")
         import traceback
         traceback.print_exc()
 
-        # 即使失败也要清理临时文件
+        # Clean up temporary files even on failure
         if 'temp_files_to_cleanup' in locals():
             for temp_file in temp_files_to_cleanup:
                 try:
@@ -330,101 +330,101 @@ def create_presentation(
 
 def main():
     parser = argparse.ArgumentParser(
-        description='将幻灯片图片组装成 PowerPoint 演示文稿',
+        description='Assemble slide images into a PowerPoint presentation',
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog='''
-示例用法:
-  # 基本用法
-  # 会在 /path/to/base/ 下查找 MyPresentation/ 文件夹
-  # 从 MyPresentation/origin_image/ 读取图片
-  # 将 PPT 保存为 MyPresentation/MyPresentation.pptx
+Examples:
+  # Basic usage
+  # Find the MyPresentation/ directory under /path/to/base/
+  # Read images from MyPresentation/origin_image/
+  # Save the PPT to MyPresentation/MyPresentation.pptx
   python assemble_ppt.py /path/to/base/ MyPresentation.pptx
 
-  # 指定 4:3 宽高比
+  # Use a 4:3 aspect ratio
   python assemble_ppt.py /path/to/base/ MyPresentation.pptx --aspect-ratio 4:3
 
-  # 只初始化目录，不生成 PPT
+  # Initialize directories without generating a PPT
   python assemble_ppt.py /path/to/base/ MyPresentation.pptx --init
 
-文件夹结构要求:
+Required directory structure:
   /path/to/base/MyPresentation/
   ├── origin_image/
   │   ├── slide_01.png
   │   ├── slide_02.png
   │   └── ...
-  ├── speech.md (可选，将写入 PPT 备注)
-  └── MyPresentation.pptx (将在此生成)
+  ├── speech.md (optional; written to PPT speaker notes)
+  └── MyPresentation.pptx (generated here)
 
-注意：
-  - 图片文件必须放在 origin_image 子目录中
-  - 只会读取 slide_01.png、slide_02.png 这类正式图片，其他图片会被忽略
-  - 图片文件按页码排序
-  - 建议图片文件命名为: slide_01.png, slide_02.png, ...
-  - 每张图片会充满整个幻灯片页面
-  - 如果项目目录下存在 speech.md，会按 Slide N 标题写入每页备注
+Notes:
+  - Place image files in the origin_image subdirectory
+  - Read only final slide images such as slide_01.png and slide_02.png; ignore other images
+  - Sort images by slide number
+  - Recommended image filenames: slide_01.png, slide_02.png, ...
+  - Each image fills the entire slide
+  - If speech.md exists in the project directory, map Slide N headings to slide notes
         '''
     )
 
-    parser.add_argument('base_dir', help='基础目录（PPT 项目文件夹的父目录）')
-    parser.add_argument('output', help='输出 PPT 文件名 (.pptx)')
+    parser.add_argument('base_dir', help='Base directory (parent of the PPT project directory)')
+    parser.add_argument('output', help='Output PPT filename (.pptx)')
     parser.add_argument('--aspect-ratio', '--ar',
                         choices=SUPPORTED_ASPECT_RATIOS,
                         default='16:9',
-                        help='幻灯片宽高比 (默认: 16:9)')
+                        help='Slide aspect ratio (default: 16:9)')
     parser.add_argument('--init',
                         action='store_true',
-                        help='只创建 PPT 项目目录和 origin_image 子目录，不生成 PPT')
+                        help='Create only the PPT project and origin_image directories without generating a PPT')
 
     args = parser.parse_args()
 
-    # 确保输出文件有 .pptx 扩展名
+    # Ensure the output filename has a .pptx extension
     output_filename = args.output
     if not output_filename.lower().endswith('.pptx'):
         output_filename += '.pptx'
 
-    # 获取 PPT 名称（不含扩展名）
+    # Get the PPT name without its extension
     ppt_name = os.path.splitext(os.path.basename(output_filename))[0]
 
-    # 构建 PPT 项目目录
+    # Build the PPT project directory path
     ppt_project_dir = os.path.join(args.base_dir, ppt_name)
     origin_image_dir = os.path.join(ppt_project_dir, "origin_image")
 
     if args.init:
         os.makedirs(origin_image_dir, exist_ok=True)
-        print(f"✓ PPT 项目目录已准备好: {ppt_project_dir}")
-        print(f"✓ 幻灯片图片目录已准备好: {origin_image_dir}")
+        print(f"✓ PPT project directory ready: {ppt_project_dir}")
+        print(f"✓ Slide image directory ready: {origin_image_dir}")
         sys.exit(0)
 
     if not os.path.exists(ppt_project_dir):
-        print(f"错误：PPT 项目目录不存在: {ppt_project_dir}")
-        print("如需初始化目录，请添加 --init 参数")
+        print(f"Error: PPT project directory does not exist: {ppt_project_dir}")
+        print("Add --init to initialize the directories")
         sys.exit(1)
 
     if not os.path.exists(origin_image_dir):
-        print(f"错误：origin_image 目录不存在: {origin_image_dir}")
-        print("如需初始化目录，请添加 --init 参数")
+        print(f"Error: origin_image directory does not exist: {origin_image_dir}")
+        print("Add --init to initialize the directories")
         sys.exit(1)
 
-    # 设置输出路径
+    # Set the output path
     output_path = os.path.join(ppt_project_dir, output_filename)
 
-    # 获取幻灯片图片
-    print(f"正在扫描 PPT 项目目录: {ppt_project_dir}")
+    # Get slide images
+    print(f"Scanning PPT project directory: {ppt_project_dir}")
     image_files = get_slide_images(ppt_project_dir)
 
     if not image_files:
-        print("错误：未找到任何图片文件")
-        print("支持的格式: .png, .jpg, .jpeg, .gif, .bmp")
-        print(f"\n请将幻灯片图片放置在: {origin_image_dir}/")
+        print("Error: no image files found")
+        print("Supported formats: .png, .jpg, .jpeg, .gif, .bmp")
+        print(f"\nPlace slide images in: {origin_image_dir}/")
         sys.exit(1)
 
-    print(f"找到 {len(image_files)} 张幻灯片图片\n")
+    print(f"Found {len(image_files)} slide images\n")
     speaker_notes = load_speaker_notes(ppt_project_dir)
     if speaker_notes:
-        print(f"找到 {len(speaker_notes)} 页备注: {os.path.join(ppt_project_dir, 'speech.md')}\n")
+        print(f"Found notes for {len(speaker_notes)} slides: {os.path.join(ppt_project_dir, 'speech.md')}\n")
 
-    # 创建演示文稿
-    print(f"正在创建 PPT (宽高比: {args.aspect_ratio})...")
+    # Create the presentation
+    print(f"Creating PPT (aspect ratio: {args.aspect_ratio})...")
     print("-" * 50)
 
     success = create_presentation(image_files, output_path, args.aspect_ratio, speaker_notes)

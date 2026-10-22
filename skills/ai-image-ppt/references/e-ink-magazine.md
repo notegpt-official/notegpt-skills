@@ -1,20 +1,20 @@
-# 电子墨水杂志风
+# E-Ink Magazine
 
-**适用场景:**
-- 线下分享
-- 行业内部讲话
-- AI / 科技产品发布
+**Use Cases:**
+- In-person talks
+- Industry talks
+- AI and technology product launches
 - Demo day
-- 个人观点型演讲
-- 非虚构叙事
-- 需要强节奏感的主题演讲
+- Personal-perspective talks
+- Nonfiction storytelling
+- Keynotes that need a strong sense of pacing
 
-**GPT-Image-2 风格 Brief:**
+**GPT-Image-2 Style Brief:**
 ```json
 {
   "type": "16:9 full-slide PowerPoint image",
-  "style_name": "电子墨水杂志风",
-  "best_for": "线下演讲、观点分享、AI/科技发布、非虚构叙事和需要强个人表达的横向演示",
+  "style_name": "E-Ink Magazine",
+  "best_for": "Landscape presentations for in-person talks, opinion sharing, AI or technology launches, nonfiction storytelling, and strong personal expression",
   "visual_direction": "electronic ink editorial presentation, premium magazine layout, serif headline, sans-serif body, monospace metadata, restrained WebGL-like ink flow background only as subtle texture, strong hero/non-hero rhythm",
   "canvas": {
     "aspect_ratio": "16:9",

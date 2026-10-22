@@ -1,19 +1,19 @@
-# 科研答辩风
+# Research Defense
 
-**适用场景:**
-- 科研项目申报答辩
-- 基金申请与重点专项汇报
-- 中期检查与结题验收
-- 论文开题、预答辩和毕业答辩
-- 课题分解、技术路线、研究基础、风险分析和预期成果展示
-- 高校、科研院所、实验室和产学研项目的正式汇报
+**Use Cases:**
+- Research project proposal defenses
+- Grant applications and major research program reports
+- Midterm reviews and final project evaluations
+- Thesis proposals, preliminary defenses, and final defenses
+- Work-package breakdowns, technical roadmaps, research foundations, risk analysis, and expected outcomes
+- Formal reports for universities, research institutes, laboratories, and industry-academia projects
 
-**GPT-Image-2 风格 Brief:**
+**GPT-Image-2 Style Brief:**
 ```json
 {
   "type": "16:9 full-slide PowerPoint image",
-  "style_name": "科研答辩风",
-  "best_for": "科研项目申报、基金答辩、课题中期检查、结题验收、论文答辩和实验室阶段性成果汇报等正式学术场景",
+  "style_name": "Research Defense",
+  "best_for": "Formal academic settings such as research proposals, grant defenses, midterm reviews, final project evaluations, thesis defenses, and laboratory progress reports",
   "visual_direction": "formal Chinese academic research defense deck, authoritative but adaptable project presentation, evidence-driven layout, structured scientific diagrams, concise conclusions, and disciplined visual hierarchy",
   "canvas": {
     "aspect_ratio": "16:9",
@@ -41,7 +41,7 @@
     "divider": "optional thin horizontal rule, blue segment, or subtle academic separator when it helps hierarchy",
     "body": "structured content area with light borders, module labels, evidence cards, diagrams, or tables as needed",
     "footer": "optional one-sentence takeaway strip or conclusion line when the slide needs a strong final claim",
-    "logo_rule": "use only user-provided logos or a neutral text placeholder such as 项目标识; do not invent real institution logos or unrelated brand names"
+    "logo_rule": "use only user-provided logos or a neutral text placeholder such as Project Identifier; do not invent real institution logos or unrelated brand names"
   },
   "layout_patterns": [
     "research background with literature timeline, policy/report evidence, and problem statement",
@@ -56,7 +56,7 @@
   "layout_usage_rule": "Use these patterns as flexible starting points, not mandatory templates. Keep the deck's academic tone, disciplined hierarchy, restrained palette, and evidence-first logic, while adapting the body layout to each slide's role and source material.",
   "layout_blueprints": [
     {
-      "name": "研究背景 / 研究现状",
+      "name": "Research Background / Current State of Research",
       "sections": [
         {"position": "top", "count": 1, "labels": ["one-sentence problem or status statement with optional emphasized phrases"]},
         {"position": "left large area", "count": 1, "labels": ["literature timeline / technical evolution / evidence collage"]},
@@ -65,19 +65,19 @@
       ]
     },
     {
-      "name": "课题分解 / 技术路线",
+      "name": "Work-Package Breakdown / Technical Roadmap",
       "sections": [
         {"position": "top", "count": 1, "labels": ["project objective sentence"]},
-        {"position": "middle", "count": 3, "labels": ["课题一", "课题二", "课题三"]},
-        {"position": "left side", "count": 2, "labels": ["应用基础研究", "关键任务核心内容"]},
-        {"position": "right side", "count": 4, "labels": ["性能研究", "应用验证", "深入探索", "关系研究"]},
+        {"position": "middle", "count": 3, "labels": ["Work Package 1", "Work Package 2", "Work Package 3"]},
+        {"position": "left side", "count": 2, "labels": ["Application-Oriented Basic Research", "Core Content of Key Tasks"]},
+        {"position": "right side", "count": 4, "labels": ["Performance Research", "Application Validation", "In-Depth Exploration", "Relationship Analysis"]},
         {"position": "bottom", "count": 1, "labels": ["chain-summary sentence"]}
       ]
     },
     {
-      "name": "核心目标 / 研究目标",
+      "name": "Core Objectives / Research Objectives",
       "sections": [
-        {"position": "top-left", "count": 1, "labels": ["blue arrow label: 核心目标 or 研究目标"]},
+        {"position": "top-left", "count": 1, "labels": ["blue arrow label: Core Objectives or Research Objectives"]},
         {"position": "top-right", "count": 1, "labels": ["target sentence with key phrases"]},
         {"position": "middle", "count": 2, "labels": ["content detail box 1", "content detail box 2"]},
         {"position": "bottom", "count": 3, "labels": ["method diagram", "mechanism image", "application validation image"]},
@@ -85,28 +85,28 @@
       ]
     },
     {
-      "name": "研究内容 / 证据展示",
+      "name": "Research Content / Evidence Presentation",
       "sections": [
         {"position": "top", "count": 1, "labels": ["research content sentence with key variables"]},
-        {"position": "middle", "count": 3, "labels": ["研究内容一", "研究内容二", "研究内容三"]},
+        {"position": "middle", "count": 3, "labels": ["Research Area 1", "Research Area 2", "Research Area 3"]},
         {"position": "inside each card", "count": 3, "labels": ["blue title bar", "scientific figure or chart", "short evidence caption"]},
         {"position": "bottom", "count": 1, "labels": ["integrated conclusion or mechanism statement"]}
       ]
     },
     {
-      "name": "风险分析",
+      "name": "Risk Analysis",
       "sections": [
         {"position": "top", "count": 1, "labels": ["risk control thesis statement"]},
-        {"position": "middle grid", "count": 4, "labels": ["技术风险", "安全风险", "性能风险", "管理风险"]},
+        {"position": "middle grid", "count": 4, "labels": ["Technical Risk", "Safety Risk", "Performance Risk", "Management Risk"]},
         {"position": "bottom", "count": 1, "labels": ["supporting scientific images and final conclusion"]}
       ]
     },
     {
-      "name": "预期成果 / 考核指标",
+      "name": "Expected Outcomes / Evaluation Metrics",
       "sections": [
-        {"position": "top", "count": 3, "labels": ["高价值", "全覆盖", "可量化"]},
-        {"position": "middle", "count": 1, "labels": ["large table: 类别 / 具体指标 / 考核方式"]},
-        {"position": "left table column", "count": 4, "labels": ["理论创新与知识产权", "技术突破与材料开发", "人才培养与学术影响", "长远发展潜力"]}
+        {"position": "top", "count": 3, "labels": ["High Value", "Full Coverage", "Measurable"]},
+        {"position": "middle", "count": 1, "labels": ["large table: Category / Specific Metric / Evaluation Method"]},
+        {"position": "left table column", "count": 4, "labels": ["Theoretical Innovation and Intellectual Property", "Technical Breakthroughs and Materials Development", "Talent Development and Academic Impact", "Long-Term Development Potential"]}
       ]
     }
   ],
@@ -116,12 +116,12 @@
   },
   "writing_style": {
     "sentence_patterns": [
-      "系统研究……并揭示……机制",
-      "构建……体系，实现……精准调控",
-      "围绕……形成完整闭环研究链条",
-      "通过……验证……性能",
-      "可有效规避或化解……风险",
-      "所有成果均设置具体、可测量指标"
+      "Systematically investigate ... and reveal the mechanism of ...",
+      "Build a ... system to achieve precise control of ...",
+      "Establish a complete closed-loop research chain around ...",
+      "Validate the performance of ... through ...",
+      "Effectively avoid or mitigate the risk of ...",
+      "Define specific, measurable metrics for every outcome"
     ],
     "emphasis_rule": "Use red bold text selectively for the scientific problem, key breakthrough, risk judgment, measurable outcome, or page-level conclusion; do not over-highlight every sentence."
   },

@@ -1,20 +1,20 @@
-# 手绘技术解释风
+# Hand-Drawn Technical Explainer
 
-**适用场景:**
-- 中文技术文章配图
-- 技术概念解释
-- 课程课件
-- 知识卡片
-- 产品机制说明
-- AI / 软件工程主题分享
-- 需要降低理解门槛的复杂概念
+**Use Cases:**
+- Illustrations for Chinese technical articles
+- Technical concept explanations
+- Course materials
+- Knowledge cards
+- Product mechanism explanations
+- AI and software engineering talks
+- Complex concepts that need an accessible explanation
 
-**GPT-Image-2 风格 Brief:**
+**GPT-Image-2 Style Brief:**
 ```json
 {
   "type": "16:9 full-slide PowerPoint image",
-  "style_name": "手绘技术解释风",
-  "best_for": "中文技术文章、课程课件、复杂概念解释、知识卡片和软件工程/AI 主题的低压力说明图",
+  "style_name": "Hand-Drawn Technical Explainer",
+  "best_for": "Approachable explanatory visuals for Chinese technical articles, course materials, complex concepts, knowledge cards, and software engineering or AI topics",
   "visual_direction": "clean Chinese handdrawn technical explainer, near-white paper background, thin sketch lines, light pencil hatching, small precise central diagram, restrained pastel markers, lots of whitespace, calm educational tone",
   "canvas": {
     "aspect_ratio": "16:9",

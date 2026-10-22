@@ -1,16 +1,16 @@
-# 党政红风格
+# Government Red
 
-**适用场景:**
-- 党政机关工作汇报、专题学习与会议材料
-- 政策宣讲、党建活动、年度总结与重点工作部署
-- 国企、事业单位和公共服务机构的正式汇报
+**Use Cases:**
+- Government and party-agency work reports, study sessions, and meeting materials
+- Policy briefings, party-building activities, annual reviews, and key work plans
+- Formal reports for state-owned enterprises, public institutions, and public-service organizations
 
-**GPT-Image-2 风格 Brief:**
+**GPT-Image-2 Style Brief:**
 ```json
 {
   "type": "16:9 full-slide PowerPoint image",
-  "style_name": "党政红风格",
-  "best_for": "党政机关、国企和事业单位的工作汇报、政策宣讲、党建学习、年度总结与重点工作部署",
+  "style_name": "Government Red",
+  "best_for": "Government, state-owned enterprise, and public-institution work reports, policy briefings, party-building study sessions, annual reviews, and key work plans",
   "visual_direction": "solemn, authoritative, and optimistic Chinese public-sector presentation with a recognizable Chinese-red identity, restrained gold accents, strong Chinese typography, and a visual expression shaped by the subject rather than a fixed ceremonial layout",
   "canvas": {
     "aspect_ratio": "16:9",
@@ -49,14 +49,14 @@
   "layout_usage_rule": "Keep the red-led identity, typography, and formal tone consistent while varying title placement, background treatment, imagery, information structure, and whitespace by page purpose. Do not force every slide into the same grid, module count, title position, or decorative motif; use lighter backgrounds when they improve readability.",
   "layout_blueprints": [
     {
-      "name": "封面 / 开场",
+      "name": "Cover / Opening",
       "sections": [
         {"position": "primary visual field", "count": 1, "labels": ["prominent title and concise supporting information"]},
         {"position": "supporting field", "count": 1, "labels": ["optional subject-relevant photograph, illustration, architecture, landscape, or abstract visual"]}
       ]
     },
     {
-      "name": "信息阐释 / 工作部署",
+      "name": "Information Explanation / Work Planning",
       "sections": [
         {"position": "title zone", "count": 1, "labels": ["clear page topic or guiding statement"]},
         {"position": "main content field", "count": 1, "labels": ["the dominant argument, relationship, process, comparison, or evidence structure"]},
@@ -64,7 +64,7 @@
       ]
     },
     {
-      "name": "成果 / 总结",
+      "name": "Achievements / Summary",
       "sections": [
         {"position": "primary message field", "count": 1, "labels": ["central conclusion, achievement, or call to action"]},
         {"position": "evidence field", "count": 1, "labels": ["figures, chart, comparison, documentary image, or concise supporting points as appropriate"]}

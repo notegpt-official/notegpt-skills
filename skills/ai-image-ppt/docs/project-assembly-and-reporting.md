@@ -31,7 +31,7 @@ You may initialize the directory structure with:
 
 ## Quality Check And Repair
 
-Before assembling the PPT, inspect every slide image. Check:
+Before assembly, complete slide QA and deck-wide consistency review; reuse earlier QA for unchanged images. Check:
 
 - Text is readable and not garbled.
 - Slide content matches the outline.
@@ -39,6 +39,7 @@ Before assembling the PPT, inspect every slide image. Check:
 - Visual style is consistent across slides.
 - No page number appears unless the user requested one.
 - Important elements do not overlap.
+- Images match the requested aspect ratio. Different pixel dimensions are acceptable when all QA checks pass; Enforce resolution only when explicitly requested by the user.
 
 If a slide has severe text or layout issues, regenerate it with a more constrained prompt. If a slide is mostly correct but has a localized issue, use the selected backend's edit capability when available. In CLI/API fallback mode, use `scripts/image_gen.py edit --image {slide_path} --prompt ... --out {new_slide_path}` and replace the final slide only after validating the edited output.
 
@@ -50,7 +51,7 @@ Create `speech.md` as presenter notes that a speaker can use directly. Do not wr
 
 For each slide, write only the spoken talk track directly under the slide heading, without an extra label. It is the script the presenter can read or closely follow. It should connect the slide to the deck's main story, explain the point the audience should take away, and include a natural transition at the end when useful.
 
-Before writing the slide notes, choose a delivery style based on the deck content, audience, and purpose. The delivery style is not a label added after writing; it should shape the actual talk track, including how direct the claim is, how much background is explained, which examples are used, how quickly the speaker moves, and how transitions are phrased.
+Before writing the slide notes, choose a delivery style consistent with the confirmed audience, scenario, and tone. It should shape the actual talk track, including how direct the claim is, how much background is explained, which examples are used, how quickly the speaker moves, and how transitions are phrased.
 
 Common delivery styles:
 
@@ -77,9 +78,9 @@ Use basic presentation craft in the talk track:
 
 Write the talk track from the presenter's point of view, facing the audience. Avoid generic AI-style phrasing, canned summaries, and phrases that sound detached from the actual talk. The script should sound like a person explaining this specific deck in the room:
 
-- Use natural first-person or speaker-facing phrasing when appropriate, such as "这里我想强调的是..." or "我们先看左边这个结构...".
+- Use natural first-person or speaker-facing phrasing when appropriate, such as "What I want to emphasize here is..." or "Let's start with the structure on the left...".
 - Ground each paragraph in the current slide's content and the surrounding deck narrative.
-- Prefer concrete explanations, examples, and audience-oriented transitions over broad filler like "本页主要介绍了..." or "综上所述...".
+- Prefer concrete explanations, examples, and audience-oriented transitions over broad filler like "This slide mainly introduces..." or "In summary...".
 - Do not mention that the notes were generated, inferred, or prepared by an AI.
 
 Use headings that the assembly script can map back to slide numbers:
@@ -95,6 +96,8 @@ Use headings that the assembly script can map back to slide numbers:
 ```
 
 ## Assembly
+
+Assemble after QA, repairs, and expected notes are complete; do not create a preliminary PPT for image QA. Verify the output opens with the expected slide count, canvas ratio, and notes. Reassemble only after a failed build/validation or changes to images, notes, or deck settings. Directory initialization (`--init`) is not assembly.
 
 Before running `scripts/assemble_ppt.py` or the CLI/API fallback scripts, make sure the shared runtime exists. If `~/.image-ppt-skill/.venv/bin/python` is missing, or if importing script dependencies fails, create or refresh the environment:
 

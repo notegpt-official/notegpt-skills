@@ -1,19 +1,19 @@
-# 数据仪表盘风
+# Data Dashboard
 
-**适用场景:**
-- 数据分析报告
-- 业绩展示
-- KPI 汇报
-- 实时数据展示
-- 商业智能BI
-- 运营数据看板
+**Use Cases:**
+- Data analysis reports
+- Performance presentations
+- KPI reports
+- Real-time data displays
+- Business intelligence (BI)
+- Operational dashboards
 
-**GPT-Image-2 风格 Brief:**
+**GPT-Image-2 Style Brief:**
 ```json
 {
   "type": "16:9 full-slide PowerPoint image",
-  "style_name": "数据仪表盘风",
-  "best_for": "数据密集型汇报、运营分析、KPI 复盘和业务洞察展示",
+  "style_name": "Data Dashboard",
+  "best_for": "Data-intensive reports, operational analysis, KPI reviews, and business insight presentations",
   "visual_direction": "bright modern SaaS analytics dashboard, clean BI interface, lightweight data cards, precise charts, professional and non-oppressive",
   "canvas": {
     "aspect_ratio": "16:9",

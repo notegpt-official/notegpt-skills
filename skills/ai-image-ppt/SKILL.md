@@ -9,14 +9,17 @@ description: Generate visually unified image-based PPT/PPTX decks from articles,
 
 This skill creates image-based PowerPoint decks from source material. Each slide is a complete generated image, defaulting to 16:9. Supported ratios are `16:9` (default), `4:3`, `1:1`, `3:4`, `9:16`, and `21:9`. If another supported ratio is requested, use it consistently in prompts, image dimensions, and PPT assembly. Final images are assembled into `.pptx` with `scripts/assemble_ppt.py`.
 
-Use this when the user wants a visually unified presentation and accepts full-slide image pages. Do not use it when every textbox, chart, or shape must remain separately editable.
+Use this for visually unified PowerPoint decks whose slides contain full-slide images. The deliverable is a `.pptx` file; image-based describes slide construction, not an alternative delivery format. Do not use it when every textbox, chart, or shape must remain separately editable.
 
 If a built-in image generation tool is available, select it directly as the image backend without reading `docs/backend-selection.md`, `docs/cli-api-fallback.md`, or `docs/image-model-configuration.md`. Otherwise, read those three files and then select the image backend. Backend selection does not require user confirmation.
 
 ## Hard Constraints
 
+- Assemble and deliver `.pptx` by default; do not ask users to choose between slide images and PPTX. Images are intermediate assets or supplementary deliverables unless the user explicitly requests images only.
 - Read the relevant `Reference Map` files before each phase. This file is the orchestration contract; detailed rules live in `docs/` and per-slide guidance in `prompts/`.
-- Require outline, visual-style (unless already clearly specified), and sample confirmation by default. Skip sample confirmation also when inspection verifies consistency with a user-provided style reference image. Otherwise waive confirmation only on explicit user request, following `docs/workflow-gates-and-progress.md`; never infer a waiver from silence or a general creation request.
+- For every script used in this workflow, learn usage from the relevant documentation first. If it does not answer the concrete question, run the script's `--help` (and subcommand `--help` when applicable). Read source only after both documentation and help are unavailable, fail, or leave that same question unresolved; then inspect only the relevant sections. An execution error alone does not bypass this order.
+- First confirm visual style, audience, scenario, tone, and slide count together, reusing explicitly specified or clearly inferable values without confirmation. Require outline and sample confirmation afterward. Skip sample confirmation also when inspection verifies consistency with a user-provided style reference image. Otherwise waive confirmation only on explicit user request, following `docs/workflow-gates-and-progress.md`; never infer a waiver from silence or a general creation request.
+- Confirmation means asking about unresolved settings or the displayed outline/sample and waiting for the user's actual selection or affirmative reply. Prefer an available built-in question tool; otherwise ask in chat. Group unresolved settings within the tool's limits, with concise choices and a recommended option. Show the outline/sample before offering approval or revision choices. Preselected defaults, tool completion, and timeouts do not count as approval.
 - Respect approval gates. Do not create final `deck_spec.json`, `speech.md`, prompt jobs, slide images, or `.pptx` before the approvals in `docs/workflow-gates-and-progress.md`.
 - After sample approval, generate remaining slides in batches of at most 6 concurrent image calls in the main agent using the selected backend. Do not delegate slide generation to subagents.
 - The main agent owns prompt jobs, generation, image saving, QA, notes, and assembly.
@@ -33,31 +36,32 @@ For non-trivial decks, keep a user-visible checklist with one active step. Canon
 
 Default visible steps:
 
-1. Prepare source, outline, style, and backend decisions.
-2. Generate and approve one sample slide.
-3. Prepare slide prompts.
-4. Generate images in batches in the main agent (up to 6 concurrent calls).
-5. Save generated slide images.
-6. QA, repair, notes, and PPT assembly.
+1. Confirm style, audience, scenario, tone, and slide count.
+2. Prepare source, outline, and backend decisions.
+3. Generate and approve one sample slide.
+4. Prepare slide prompts.
+5. Generate images in batches in the main agent (up to 6 concurrent calls).
+6. Save generated slide images.
+7. QA, repair, notes, and PPT assembly.
 
-Do not mark a step complete from chat alone; use actual output files.
+Use the gate evidence in `docs/workflow-gates-and-progress.md` for confirmation steps and actual output files for production steps.
 
 ## Default Workflow
 
-1. Prepare source material, project directory, and assets.
+1. Confirm style, audience, scenario, tone, and slide count.
+   - Read `docs/workflow-gates-and-progress.md` and `docs/outline-style-and-sample.md`.
+   - Reuse explicit choices and settings clearly inferable from the user's request; briefly state inferred settings and ask only about missing or ambiguous values together, preferably using an available built-in question tool, with a recommended combination. Audience examples: students, teachers, colleagues. Scenario examples: teaching slides, picture books, work summaries, business reports. Tone examples: neutral, friendly, professional, educational, technical, academic.
+   - Resolve this gate before source preparation and outlining. Inspect supplied style references as needed for this decision; record the settings in `outline.md` once the project exists.
+
+2. Prepare source material, project directory, and assets.
    - Read `docs/project-assembly-and-reporting.md` before initializing folders and `docs/user-supplied-assets.md` before using source images.
-   - Identify topic, audience, goal, language, page count, and required or excluded content. Default to a practical 8-12 slides.
+   - Identify topic, goal, language, and required or excluded content using the confirmed audience, scenario, and tone; retain the confirmed slide count.
    - Choose the output directory and initialize the project folders before writing the outline or generating a sample. Use the current working directory or source directory when no destination is given.
    - Extract and inspect required assets, recording their paths and roles. Folder initialization does not authorize downstream production.
 
-2. Plan and confirm the outline.
+3. Plan and confirm the outline.
    - Read `docs/workflow-gates-and-progress.md` and `docs/outline-style-and-sample.md`.
-   - Write `outline.md` with titles, key points, page roles, and required image mappings. Obtain approval before style selection or generation, unless the user explicitly waived confirmation.
-
-3. Confirm the visual style.
-   - Read `docs/outline-style-and-sample.md`.
-   - If the user supplied a clear style or visual reference, extract and briefly restate its rules. Otherwise offer 2-3 built-in style directions and recommend one for confirmation.
-   - Keep one visual identity while varying page layouts by content.
+   - Write `outline.md` with the confirmed settings, titles, key points, page roles, and required image mappings. Present it and ask for outline approval, preferably using an available built-in question tool; wait for an affirmative reply before generation, unless the user explicitly waived confirmation.
 
 4. Select the image backend.
    - If a built-in image generation tool is available, select it directly. Do not read `docs/backend-selection.md`, `docs/cli-api-fallback.md`, or `docs/image-model-configuration.md` on this path.
@@ -65,12 +69,14 @@ Do not mark a step complete from chat alone; use actual output files.
 
 5. Generate and approve one sample.
    - Read `docs/outline-style-and-sample.md` and generate one representative slide after the outline and style are approved and the backend is selected.
-   - Save it under its final `origin_image/slide_XX.png` name. Obtain approval before full production unless the user explicitly waived sample confirmation or inspection verifies that the sample matches a user-provided style reference image; apply the checks in `docs/outline-style-and-sample.md`.
+   - Compose the sample prompt directly from the confirmed outline, style, and required references; do not run `prepare_slide_prompts.py` to prepare the sample.
+   - Save it under its final `origin_image/slide_XX.png` name. Show the sample inline with Markdown image syntax `![Sample slide](image_path_or_url)`, not a plain link, and ask for approval, preferably using an available built-in question tool; wait for an affirmative reply before full production unless the user explicitly waived sample confirmation or inspection verifies that the sample matches a user-provided style reference image; apply the checks in `docs/outline-style-and-sample.md`.
 
 6. Prepare the deck specification and jobs.
    - Read `docs/slide-generation.md`.
    - Create `deck_spec.json`, including the approved sample method and `approved_style_reference`. Keep the approved sample image at its final path.
-   - Run `prepare_slide_prompts.py` to create per-slide prompt files. Reuse the approved sample: its final image already exists.
+   - Carry audience, scenario, and tone into `deck_context` so every slide job inherits them; use the confirmed style in `style` and tone in speaker notes.
+   - Run `prepare_slide_prompts.py` once after recording the accepted sample's actual method and style reference. Rebuild jobs only when the spec changes. Reuse the approved sample: its final image already exists.
 
 7. Generate and save each remaining slide.
    - Read `prompts/slide-generation.md` and execute jobs whose expected final images are missing in batches of at most 6 concurrent image calls in the main agent. Do not delegate.
@@ -88,6 +94,7 @@ Do not mark a step complete from chat alone; use actual output files.
     - Before writing `speech.md` or running assembly, read `docs/project-assembly-and-reporting.md`.
     - Make sure `outline.md` reflects the final confirmed deck outline. Use `speech.md` headings that map to `Slide N`.
     - Before assembly, check every expected image path from `deck_spec.json`. Stop if any image is missing; do not rely on file count alone.
+    - Complete image QA, repairs, and notes before assembly; follow the assembly and rebuild rules in `docs/project-assembly-and-reporting.md`.
 
 10. Report the result.
     - Use the final report checklist in `docs/project-assembly-and-reporting.md`.

@@ -298,7 +298,7 @@ def _write_template(path: Path) -> None:
             "execution_rule": "The main agent retains the backend and visual settings; select generate/edit as needed and report unavailable capabilities.",
         },
         "style": {
-            "name": "手绘技术解释风",
+            "name": "Hand-Drawn Technical Explainer",
             "visual_direction": "clean hand-drawn technical explainer",
             "color_palette": "white background, black marker lines, pale yellow highlights",
             "typography": "large readable Chinese headings, compact handwritten annotations",

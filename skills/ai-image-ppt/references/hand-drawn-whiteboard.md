@@ -1,19 +1,19 @@
-# 手绘白板风
+# Hand-Drawn Whiteboard
 
-**适用场景:**
-- 教学讲解
-- 培训课程
-- 头脑风暴
-- 概念说明
-- 技术分享
-- 内部研讨
+**Use Cases:**
+- Classroom explanations
+- Training courses
+- Brainstorming
+- Concept explanations
+- Technical talks
+- Internal workshops
 
-**GPT-Image-2 风格 Brief:**
+**GPT-Image-2 Style Brief:**
 ```json
 {
   "type": "16:9 full-slide PowerPoint image",
-  "style_name": "手绘白板风",
-  "best_for": "概念解释、技术分享、培训课程和需要亲和力的思路拆解",
+  "style_name": "Hand-Drawn Whiteboard",
+  "best_for": "Concept explanations, technical talks, training courses, and approachable breakdowns of ideas",
   "visual_direction": "realistic whiteboard explanation slide, marker handwriting, sketched diagrams, friendly teaching atmosphere, authentic whiteboard details",
   "canvas": {
     "aspect_ratio": "16:9",

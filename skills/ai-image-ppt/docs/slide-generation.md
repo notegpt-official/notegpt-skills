@@ -27,6 +27,8 @@ Before full production, create structured per-slide image jobs. Prefer the bundl
 
 The helper writes `prompts/slide_XX.json` for every slide and creates `origin_image/` if needed. It does not generate images or maintain task-state files.
 
+If a spec example is needed, run `~/.image-ppt-skill/.venv/bin/python {skill_root}/scripts/prepare_slide_prompts.py --write-template /existing/scratch/directory/deck_spec.example.json`. This writes an example only; replace its example values before use.
+
 Each `prompts/slide_XX.json` is a self-contained slide job. It includes the slide number, title, output filename, input image list, whether context images are required, and the full prompt text. Use these JSON job files for built-in image generation, CLI/API fallback coordination, and main-agent execution. Do not create a separate task-state manifest.
 
 Save all necessary context in each job so it remains reproducible without implicit conversation references.

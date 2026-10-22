@@ -1,20 +1,20 @@
-# 麦肯锡风格
+# McKinsey Style
 
-**适用场景:**
-- 商业咨询型 PPT / PPTX 整套演示
-- PPT 封面页、章节页、关键观点页
-- 咨询分析页、框架页、方法论页
-- 流程图、路线图、矩阵图、价值链、五力模型、2x2 定位图
-- 结论页、建议页、执行路线页
-- 商业策略、增长、转型、组织、效率、机会、风险等主题
-- 需要“文字主导 + 商业隐喻 + 咨询报告质感”的视觉型演示
+**Use Cases:**
+- Complete business consulting PPT or PPTX decks
+- Cover, section-divider, and key-message slides
+- Consulting analysis, framework, and methodology slides
+- Flowcharts, roadmaps, matrices, value chains, five-forces models, and 2x2 positioning maps
+- Conclusion, recommendation, and execution-roadmap slides
+- Business strategy, growth, transformation, organization, efficiency, opportunity, and risk
+- Visual presentations combining text-led design, business metaphors, and a consulting-report aesthetic
 
-**GPT-Image-2 风格 Brief:**
+**GPT-Image-2 Style Brief:**
 ```json
 {
   "type": "16:9 full-slide PowerPoint image",
-  "style_name": "麦肯锡风格",
-  "best_for": "商业咨询型 PPT / PPTX 整套演示，包括封面页、章节页、关键观点页、咨询分析页、框架页、方法论页、流程图、路线图、矩阵图、价值链、五力模型、2x2 定位图、结论页、建议页和执行路线页；适合商业策略、增长、转型、组织、效率、机会、风险等需要麦肯锡式理性气质、高端咨询报告视觉、标题信息重构、商业隐喻和清晰商业叙事的场景",
+  "style_name": "McKinsey Style",
+  "best_for": "Complete business consulting PPT or PPTX decks, including covers, section dividers, key messages, consulting analyses, frameworks, methodologies, flowcharts, roadmaps, matrices, value chains, five-forces models, 2x2 positioning maps, conclusions, recommendations, and execution roadmaps; suited to strategy, growth, transformation, organization, efficiency, opportunity, and risk topics requiring McKinsey-like rationality, premium consulting-report visuals, restructured title typography, business metaphors, and clear business storytelling",
   "visual_direction": "McKinsey / BCG / Bain style rational consulting visual, premium executive report cover, modernist typographic poster, art-directed business metaphor, reconstructed title as architectural structure, precision annotation system, sharp Swiss grid, light blue-gray white palette, clean corporate editorial design, boardroom-ready restraint with real graphic tension",
   "canvas": {
     "aspect_ratio": "16:9",
@@ -54,17 +54,17 @@
   "layout_usage_rule": "Use layout_blueprints as candidate starting points only. First identify the PPT slide role: title slide, section divider, key-message slide, analysis/framework slide, process/roadmap slide, matrix/positioning slide, or summary/recommendation slide. For title, divider, and key-message slides, use one giant reconstructed title, one dominant metaphor, low information density, strong whitespace, very few auxiliary words, and a visible graphic idea in the typography itself. For analysis, framework, process, and recommendation slides, use 3-6 main modules, one core structure, one dominant metaphor, concise labels, small legends or numbering, and a clear reading path. Keep a McKinsey-like rational, professional, restrained, premium identity while varying slide layouts across the deck. The slide should feel designed, not merely organized: use optical balance, scale contrast, precise margins, micro labels, and one memorable visual decision. Do not turn a secondary motif, footer, icon, callout strip, or module arrangement into a repeated master layout. Avoid default card grids, generic flowchart templates, and slides that only look organized but have no visual concept.",
   "layout_blueprints": [
     {
-      "name": "PPT 封面页 / 章节页: 重构标题 + 单一商业隐喻",
+      "name": "PPT Cover / Section Divider: Reconstructed Title + One Business Metaphor",
       "sections": [
-        {"position": "top", "count": 1, "labels": ["完整标题 / 英文分类标签 / 年份或编号"]},
+        {"position": "top", "count": 1, "labels": ["Full Title / English Category Tags / Year or Number"]},
         {"position": "center", "count": 1, "labels": ["giant reconstructed core word"]},
         {"position": "inside typography", "count": 1, "labels": ["one dominant metaphor fused into typography"]},
-        {"position": "left and right edge", "count": 3, "labels": ["起点词", "终点词", "价值词"]},
+        {"position": "left and right edge", "count": 3, "labels": ["Starting-Point Term", "End-Point Term", "Value Term"]},
         {"position": "optional bottom or side", "count": 1, "labels": ["short takeaway only when useful"]}
       ]
     },
     {
-      "name": "PPT 关键观点页: 字体结构 + 咨询报告系统",
+      "name": "PPT Key-Message Slide: Typographic Structure + Consulting-Report System",
       "sections": [
         {"position": "top-left", "count": 1, "labels": ["small complete title system"]},
         {"position": "top-right", "count": 4, "labels": ["STRATEGY", "INSIGHT", "REPORT COVER", "2026"]},
@@ -74,7 +74,7 @@
       ]
     },
     {
-      "name": "PPT 分析页: 核心结构 + 左右辅助模块",
+      "name": "PPT Analysis Slide: Core Structure + Supporting Side Modules",
       "sections": [
         {"position": "top", "count": 1, "labels": ["title, subtitle, classification tags"]},
         {"position": "center", "count": 1, "labels": ["core flow / matrix / system / funnel / value chain"]},
@@ -84,7 +84,7 @@
       ]
     },
     {
-      "name": "PPT 框架页: 矩阵 / 坐标 / 路线图",
+      "name": "PPT Framework Slide: Matrix / Coordinates / Roadmap",
       "sections": [
         {"position": "top", "count": 1, "labels": ["complete analytical title and short subtitle"]},
         {"position": "main area", "count": 1, "labels": ["2x2 matrix / coordinate map / roadmap"]},

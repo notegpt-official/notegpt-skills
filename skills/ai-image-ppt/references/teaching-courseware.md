@@ -1,17 +1,17 @@
-# 教学课件风
+# Teaching Courseware
 
-**适用场景:**
-- 高校课程、专题讲座与课堂教学
-- 技术培训、知识科普与专业能力建设
-- 概念讲解、体系梳理、案例分析与研究进展介绍
-- 需要同时呈现文字、图解、图片和数据的教学型演示
+**Use Cases:**
+- University courses, specialist lectures, and classroom teaching
+- Technical training, science communication, and professional development
+- Concept explanations, system overviews, case analyses, and research updates
+- Educational presentations combining text, diagrams, images, and data
 
-**GPT-Image-2 风格 Brief:**
+**GPT-Image-2 Style Brief:**
 ```json
 {
   "type": "16:9 full-slide PowerPoint image",
-  "style_name": "教学课件风",
-  "best_for": "高校课程、专题讲座、技术培训、知识科普、概念讲解、体系梳理、案例分析和研究进展介绍",
+  "style_name": "Teaching Courseware",
+  "best_for": "University courses, specialist lectures, technical training, science communication, concept explanations, system overviews, case analyses, and research updates",
   "visual_direction": "clear and credible academic courseware with structured knowledge communication, evidence-supported explanation, discipline-appropriate visuals, and a professional classroom tone shaped by the lesson rather than a fixed technical template",
   "canvas": {
     "aspect_ratio": "16:9",
@@ -53,7 +53,7 @@
   "layout_usage_rule": "Choose the layout that best supports the teaching objective and viewing sequence. Every slide should combine meaningful visual explanation with readable text; use one strong visual or several complementary photographs, diagrams, charts, maps, formulas, documents, artworks, screenshots, or annotated examples according to the discipline and content. Keep the visual language coherent without forcing every page into cards, equal columns, or one repeated composition.",
   "layout_blueprints": [
     {
-      "name": "概念 / 知识讲解",
+      "name": "Concept / Knowledge Explanation",
       "sections": [
         {"position": "title area", "count": 1, "labels": ["lesson question or core concept"]},
         {"position": "primary teaching field", "count": 1, "labels": ["the most suitable visual and explanatory structure for the concept"]},
@@ -61,7 +61,7 @@
       ]
     },
     {
-      "name": "过程 / 关系讲解",
+      "name": "Process / Relationship Explanation",
       "sections": [
         {"position": "title area", "count": 1, "labels": ["process, development, comparison, or relationship topic"]},
         {"position": "primary relationship field", "count": 1, "labels": ["sequence, cause, contrast, hierarchy, interaction, or transformation"]},
@@ -69,7 +69,7 @@
       ]
     },
     {
-      "name": "案例 / 材料 / 证据",
+      "name": "Cases / Materials / Evidence",
       "sections": [
         {"position": "context field", "count": 1, "labels": ["case, text, event, artwork, experiment, or application context"]},
         {"position": "evidence field", "count": 1, "labels": ["relevant visual material, source excerpt, data, observations, or comparison"]},
