@@ -51,7 +51,7 @@ Use the gate evidence in `docs/workflow-gates-and-progress.md` for confirmation 
 1. Confirm style, audience, scenario, tone, and slide count.
    - Read `docs/workflow-gates-and-progress.md` and `docs/outline-style-and-sample.md`.
    - Reuse explicit choices and settings clearly inferable from the user's request; briefly state inferred settings and ask only about missing or ambiguous values together, preferably using an available built-in question tool, with a recommended combination. Audience examples: students, teachers, colleagues. Scenario examples: teaching slides, picture books, work summaries, business reports. Tone examples: neutral, friendly, professional, educational, technical, academic.
-   - Resolve this gate before source preparation and outlining. Inspect supplied style references as needed for this decision; record the settings in `outline.md` once the project exists.
+   - Reference images resolve visual style only. Never infer audience, scenario, tone, or slide count from their content, appearance, or quantity; use the user's written instructions for those settings and ask when unresolved. Resolve this gate before source preparation and outlining; record the settings in `outline.md` once the project exists.
 
 2. Prepare source material, project directory, and assets.
    - Read `docs/project-assembly-and-reporting.md` before initializing folders and `docs/user-supplied-assets.md` before using source images.
